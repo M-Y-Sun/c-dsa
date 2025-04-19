@@ -1,46 +1,36 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * FILE NAME:                                                                *
- * vector.h                                                                  *
- *                                                                           *
- * PURPOSE:                                                                  *
- * Includes function declarations/prototypes for all functions               *
- *                                                                           *
- * EXTERNAL REFERENCES:                                                      *
- * 'size_t' type            (from <stdlib.h>)                                *
- * 'elem_t' struct          (from 'structs.h')                               *
- * 'vec_t' struct           (from 'structs.h')                               *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
 #pragma once
 
-#include "./structs.h"
+#ifndef SLL_SLL_H
+#define SLL_SLL_H
+
+#include "structs.h"
 
 /****** MUST INCLUDE ******/
 
-/** Initializes a `vec_t` instance. */
-void setup_v (vec_t *vec);
+/** Initializes a `cdsa_sll_t ` instance. */
+void cdsa_sll_init (cdsa_sll_t vec);
 
-/** Cleans up a `vec_t` instance to free allocated memory. */
-void cleanup_v (vec_t *vec);
+/** Cleans up a `cdsa_sll_t ` instance to free allocated memory. */
+void cdsa_sll_deinit (cdsa_sll_t vec);
 
 /****** READ ONLY FUNCTIONS ******/
 
 /** @return The length of the vector */
-size_t size_v (vec_t *vec);
+size_t cdsa_sll_size (cdsa_sll_t vec);
 
 /** @return A pointer to the first value */
-int front_v (vec_t *vec);
+int cdsa_sll_front (cdsa_sll_t vec);
 
 /** @return A pointer to the last value */
-int back_v (vec_t *vec);
+int cdsa_sll_back (cdsa_sll_t vec);
 
 /** @return If the vector is empty */
-int empty_v (vec_t *vec);
+int cdsa_sll_empty (cdsa_sll_t vec);
 
 /****** MODIFIER FUNCTIONS ******/
 
 /** Deletes all elements in the vector. */
-void clear_v (vec_t *vec);
+void cdsa_sll_clear (cdsa_sll_t vec);
 
 /**
  * Fills an empty vector to a specified size and initializes all values to a
@@ -48,58 +38,58 @@ void clear_v (vec_t *vec);
  * @param size The size to assign to
  * @param data The data to assign each element to
  * */
-void assign_v (vec_t *vec, size_t size, int data);
+void cdsa_sll_assign (cdsa_sll_t vec, size_t size, int data);
 
 /**
  * Resizes the vector and initiates all values to a specific value
  * @param size The size to resize to
  * @param data The data to assign each new value to
  * */
-void resize_v (vec_t *vec, size_t size, int data);
+void cdsa_sll_resize (cdsa_sll_t vec, size_t size, int data);
 
 /**
  * Adds an element to the end
  * @param data The data to append
  * */
-void pushb_v (vec_t *vec, int data);
+void cdsa_sll_pushb (cdsa_sll_t vec, int data);
 
 /**
  * @param pos The position to get
  * @return A pointer to the value at a certain location.
  * */
-int *get_v (vec_t *vec, size_t pos);
+int *cdsa_sll_get (cdsa_sll_t vec, size_t pos);
 
 /**
  * Inserts an element in a specified position
  * @param pos The position to insert at
  * @param data The data to insert
  * */
-struct elem_t *insert_v (vec_t *vec, size_t pos, int data);
+struct __sll_elem_t *cdsa_sll_insert (cdsa_sll_t vec, size_t pos, int data);
 
 /**
  * Swaps the value of two elements in a specified position
  * @param i1 The index of the first element
  * @param i2 The index of the second element
  * */
-void swap_v (vec_t *vec, size_t i1, size_t i2);
+void cdsa_sll_swap (cdsa_sll_t vec, size_t i1, size_t i2);
 
 /**
  * Deletes an element in a specified position
  * @param pos The position to erase
  * */
-void erase_v (vec_t *vec, size_t pos);
+void cdsa_sll_erase (cdsa_sll_t vec, size_t pos);
 
 /**
  * Removes the last element.
  * @return The data stored by the popped value.
  * */
-int popb_v (vec_t *vec);
+int cdsa_sll_popb (cdsa_sll_t vec);
 
 /**
  * Removes the first element.
  * @return The data stored by the popped value.
  * */
-int popf_v (vec_t *vec);
+int cdsa_sll_popf (cdsa_sll_t vec);
 
 /****** QUALITY OF LIFE FUNCTIONS (READ ONLY) ******/
 
@@ -111,18 +101,20 @@ int popf_v (vec_t *vec);
  * @param beg The beginning index
  * @param end The ending index
  * */
-void print_v (vec_t *vec, size_t beg, size_t end);
+void cdsa_sll_print (cdsa_sll_t vec, size_t beg, size_t end);
 
 /**
  * @return The sum of the elements of a vector in a certain range [beg, end).
  * @param beg The beginning index
  * @param end The ending index
  * */
-int64_t sum_v (vec_t *vec, size_t beg, size_t end);
+int64_t cdsa_sll_sum (cdsa_sll_t vec, size_t beg, size_t end);
 
 /**
  * @return The product of the elements of a vector in a certain range
  * @param beg The beginning index
  * @param end The ending index
  * */
-int64_t prod_v (vec_t *vec, size_t beg, size_t end);
+int64_t cdsa_sll_prod (cdsa_sll_t vec, size_t beg, size_t end);
+
+#endif

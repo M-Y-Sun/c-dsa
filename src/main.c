@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "heap.h"
-#include "vector.h"
+#include "sll.h"
 
 int
 main (void)
@@ -32,69 +32,70 @@ main (void)
 
     puts ("--------");
 
-    vec_t *vector = (vec_t *)malloc (sizeof (vec_t));
-    setup_v (vector); // set up the vector
-    printf ("[   \033[1;32mOK\033[0m   ] setup finished\n");
+    cdsa_sll_t sll;
+    cdsa_sll_init (sll); // set up the sll
+    printf ("[   \033[1;32mOK\033[0m   ] sll init\n");
 
-    // vassign(vector, 3);  <- sets the vector to size 3 with values of 0. Only
-    // works when vector is empty
+    // vassign(sll, 3);  <- sets the sll to size 3 with values of 0. Only
+    // works when sll is empty
 
-    // append 3 values to the vector
-    pushb_v (vector, 0);
-    pushb_v (vector, 1);
-    pushb_v (vector, 2);
+    // append 3 values to the sll
+    cdsa_sll_pushb (sll, 0);
+    cdsa_sll_pushb (sll, 1);
+    cdsa_sll_pushb (sll, 2);
 
     // print information
-    // size_v() gets the size of the vector
-    printf ("size: %lu\n", size_v (vector));
-    // get_v gets the address of the value at a specific position
-    printf ("0th index: %d\n", *get_v (vector, 0));
-    printf ("1st index: %d\n", *get_v (vector, 1));
-    printf ("2nd index: %d\n", *get_v (vector, 2));
+    // size() gets the size of the sll
+    printf ("size: %lu\n", cdsa_sll_size (sll));
+    // get gets the address of the value at a specific position
+    printf ("0th index: %d\n", *cdsa_sll_get (sll, 0));
+    printf ("1st index: %d\n", *cdsa_sll_get (sll, 1));
+    printf ("2nd index: %d\n", *cdsa_sll_get (sll, 2));
 
-    // int bv = popb_v(vector);  <- deletes the last value and stores it in bv
-    // int fv = popf_v(vector);  <- deletes the first value and stores it in fv
+    // int bv = popb(sll);  <- deletes the last value and stores it in bv
+    // int fv = popf(sll);  <- deletes the first value and stores it in fv
 
-    erase_v (vector, 1); // erases the element at a certain index
-    printf ("updated 1st index after erase: %d\n", *get_v (vector, 1));
+    cdsa_sll_erase (sll, 1); // erases the element at a certain index
+    printf ("updated 1st index after erase: %d\n", *cdsa_sll_get (sll, 1));
 
     // inserts an element at a certain index with a certain value
-    insert_v (vector, 1, 4);
-    printf ("updated 1st index after insertion: %d\n", *get_v (vector, 1));
+    cdsa_sll_insert (sll, 1, 4);
+    printf ("updated 1st index after insertion: %d\n", *cdsa_sll_get (sll, 1));
 
-    // vclear(vector);  // deletes all elements
+    // vclear(sll);  // deletes all elements
 
-    *get_v (vector, 1) = 8;
-    printf ("updated 1st index after change: %d\n", *get_v (vector, 1));
+    *cdsa_sll_get (sll, 1) = 8;
+    printf ("updated 1st index after change: %d\n", *cdsa_sll_get (sll, 1));
 
-    swap_v (vector, 1, 2); // swaps two elements
-    printf ("updated 1st index after swap: %d\n", *get_v (vector, 1));
+    cdsa_sll_swap (sll, 1, 2); // swaps two elements
+    printf ("updated 1st index after swap: %d\n", *cdsa_sll_get (sll, 1));
 
-    resize_v (vector, 5, -1); // resizes the vector to a certain size with
-                              // undefined values set to a certain value
-    printf ("size after first resize: %lu\n", size_v (vector));
+    cdsa_sll_resize (sll, 5, -1); // resizes the sll to a certain size with
+                                  // undefined values set to a certain value
+    printf ("size after first resize: %lu\n", cdsa_sll_size (sll));
 
-    resize_v (vector, 3, -1);
-    printf ("size after second resize: %lu\n", size_v (vector));
+    cdsa_sll_resize (sll, 3, -1);
+    printf ("size after second resize: %lu\n", cdsa_sll_size (sll));
 
     // gets the first and last value respectively
-    printf ("(first value, last value): (%d, %d)\n", front_v (vector),
-            back_v (vector));
+    printf ("(first value, last value): (%d, %d)\n", cdsa_sll_front (sll),
+            cdsa_sll_back (sll));
 
     printf ("elements 0 to 1: ");
-    print_v (vector, 0, 2);
-    printf ("final vector: ");
-    print_v (vector, 0, size_v (vector));
+    cdsa_sll_print (sll, 0, 2);
+    printf ("final sll: ");
+    cdsa_sll_print (sll, 0, cdsa_sll_size (sll));
     // computes the sum of the elements in a certain range, returns int64_t
-    printf ("sum of all elements: %lld\n", sum_v (vector, 0, size_v (vector)));
+    printf ("sum of all elements: %lld\n",
+            cdsa_sll_sum (sll, 0, cdsa_sll_size (sll)));
 
     // computes the product of all the elements in a certain range, returns
     // int64_t
     printf ("product of elements 1 to 2: %lld\n",
-            prod_v (vector, 1, size_v (vector)));
+            cdsa_sll_prod (sll, 1, cdsa_sll_size (sll)));
 
-    cleanup_v (vector); // clean up vector and free memory
-    printf ("[   \033[1;32mOK\033[0m   ] cleanup finished\n");
+    cdsa_sll_deinit (sll); // clean up sll and free memory
+    printf ("[   \033[1;32mOK\033[0m   ] sll deinit\n");
 
     return 0;
 }

@@ -10,26 +10,26 @@
 
 ### SLL
 
-- Do not add features that require the user to directly access member variables of a struct or create an instance of the `elem_t` type
-- Do not `typedef` any pointers or structs unless they are completely opaque and must be completely abstracted (like `vec_t`)
+- Do not add features that require the user to directly access member variables of a struct or create an instance of the `cdsa_sll_elem_t` type
+- Do not `typedef` any pointers or structs unless they are completely opaque and must be completely abstracted (like `cdsa_sll_t`)
 - File contents intended only for developer use only should be stated in the block comment prolog.
 - Individual functions intended for developer use only should be marked as `devonly` in a comment above the function <u>only in the header file</u>, following the below example:
 
 ```c
 // devonly
 // function description
-void devfunc(vec_t *vec);
+void devfunc(cdsa_sll_t *vec);
 ```
 
 - Function names should not include underscores other than the `_v` prefix
 - Place functions in the correct file based on category (function implementations are located in the `implementation` directory): `mandatory`, `read only`, `modifier`, and `quality of life`.
-- Separate each category with four new lines in `vector.h`, separate category title with one new line, and do not leave a new line between function descriptions and function declaration, following the example below:
+- Separate each category with four new lines in `sll.h`, separate category title with one new line, and do not leave a new line between function descriptions and function declaration, following the example below:
 
 ```c
 // category name
 
 // function description
-void func(vec_t *vec);
+void func(cdsa_sll_t *vec);
 
 
 
@@ -54,7 +54,7 @@ void func(vec_t *vec);
 
 ### SLL
 
-Users of this project are restricted to certain functions in `vector.h`, listed below:
+Users of this project are restricted to certain functions in `sll.h`, listed below:
 
 Mandatory:
 

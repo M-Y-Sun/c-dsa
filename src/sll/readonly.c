@@ -1,44 +1,27 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * FILE NAME:                                                                *
- * readonly.c                                                                *
- *                                                                           *
- * PURPOSE:                                                                  *
- * Includes functions that obtain data from the vector.                      *
- *                                                                           *
- * EXTERNAL REFERENCES:                                                      *
- * 'size_t' type            (from <stdlib.h>)                                *
- * 'perror' function        (from <stdio.h>)                                 *
- * 'vec_t' struct             (from "structs.h")                             *
- * 'elem_t' struct            (from "structs.h")                             *
- *                                                                           *
- * NOTES:                                                                    *
- * vector will be unchanged after funcion call.                              *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
 #include <stdio.h>
 
+#include "sll.h"
 #include "structs.h"
-#include "vector.h"
 
 /** @return The length of the vector */
 size_t
-size_v (vec_t *vec)
+cdsa_sll_size (cdsa_sll_t vec)
 {
     return vec->size;
 }
 
 /** @return A pointer to the first value */
 int
-front_v (vec_t *vec)
+cdsa_sll_front (cdsa_sll_t vec)
 {
     return vec->front->data;
 }
 
 /** @return A pointer to the last value */
 int
-back_v (vec_t *vec)
+cdsa_sll_back (cdsa_sll_t vec)
 {
-    struct elem_t *iter = vec->front;
+    struct __sll_elem_t *iter = vec->front;
 
     for (size_t i = 0; i < vec->size - 1; ++i)
         iter = iter->next;
@@ -48,7 +31,7 @@ back_v (vec_t *vec)
 
 /** @return If the vector is empty */
 int
-empty_v (vec_t *vec)
+cdsa_sll_empty (cdsa_sll_t vec)
 {
     return vec->front == NULL;
 }

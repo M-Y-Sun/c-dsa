@@ -141,8 +141,9 @@ install:
 	if [ ! -d $(C_OUT) ] || [ ! -d $(C_OUT)/lib ]; then \
 		echo 'Nothing to install'; \
 	else \
-		find $(C_OUT)/lib -type f -exec cp {} $(IPREFIX)/lib \;; \
-		find $(C_OUT)/lib -type f -exec echo Installed {} to $(IPREFIX)/lib/{} \;; \
+		find $(C_OUT)/lib -type f -exec cp {} $(IPREFIX)/lib \; -exec echo Installed {} to $(IPREFIX)/lib/{} \;; \
+		mkdir -p $(IPREFIX)/include/c/c-dsa; \
+		find $(INCL_DIR) -type f -exec cp {} $(IPREFIX)/include/c/c-dsa \; -exec echo Installed {} to $(IPREFIX)/include/c/c-dsa/{} \;; \
 	fi
 	echo 'All done'
 
@@ -159,4 +160,5 @@ uninstall:
 			echo "Uninstalled $${name}.so"; \
 		fi; \
 	done
+	rm -rv $(IPREFIX)/include/c/c-dsa | sed 's/^/Uninstalled /'
 	echo 'All done'

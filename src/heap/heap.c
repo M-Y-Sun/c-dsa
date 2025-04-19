@@ -11,7 +11,7 @@
 static void
 heap_swap_ (volatile const cdsa_heap_t heap, size_t i, size_t j)
 {
-    __cdsa_heap_val_t tmp = heap->c_[i];
+    __heap_val_t tmp = heap->c_[i];
     heap->c_[i] = heap->c_[j];
     heap->c_[j] = tmp;
 }
@@ -52,12 +52,12 @@ bubble_down_ (volatile const cdsa_heap_t heap, size_t pos)
 void
 cdsa_heap_init (volatile cdsa_heap_t this, size_t max_sz)
 {
-    this->c_ = malloc (max_sz * sizeof (__cdsa_heap_val_t));
+    this->c_ = malloc (max_sz * sizeof (__heap_val_t));
     this->next_ = 0;
 }
 
 void
-cdsa_heap_init_arr (volatile cdsa_heap_t this, __cdsa_heap_val_t *arr,
+cdsa_heap_init_arr (volatile cdsa_heap_t this, __heap_val_t *arr,
                     size_t len)
 {
     this->c_ = arr;
@@ -79,14 +79,14 @@ void cdsa_heap_deinit (volatile cdsa_heap_t this)
     this = NULL;
 }
 
-__cdsa_heap_val_t
+__heap_val_t
 cdsa_heap_min (volatile const cdsa_heap_t this)
 {
     return this->c_[0];
 }
 
 void
-cdsa_heap_insert (volatile cdsa_heap_t this, __cdsa_heap_val_t v)
+cdsa_heap_insert (volatile cdsa_heap_t this, __heap_val_t v)
 {
     size_t pos = this->next_++;
     this->c_[pos] = v;
@@ -100,14 +100,14 @@ void cdsa_heap_delete (volatile cdsa_heap_t this)
 }
 
 void
-cdsa_heap_replace_always (volatile const cdsa_heap_t this, __cdsa_heap_val_t v)
+cdsa_heap_replace_always (volatile const cdsa_heap_t this, __heap_val_t v)
 {
     root_ (this) = v;
     bubble_down_ (this, CDSA_HEAP_ROOT_POS);
 }
 
 void
-cdsa_heap_replace_first (volatile const cdsa_heap_t this, __cdsa_heap_val_t v)
+cdsa_heap_replace_first (volatile const cdsa_heap_t this, __heap_val_t v)
 {
     if (v <= root_ (this))
         return;

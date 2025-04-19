@@ -1,20 +1,3 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * FILE NAME:                                                                *
- * helper.c                                                                  *
- *                                                                           *
- * PURPOSE:                                                                  *
- * includes helper functions for developer convenience.                      *
- *                                                                           *
- * EXTERNAL REFERENCES:                                                      *
- * 'size_t' type        (from <stdlib.h>)                                    *
- * 'perror' function    (from <stdio.h>)                                     *
- * 'vec_t' struct         (from "structs.h")                                 *
- * 'elem_t' struct        (from "structs.h")                                 *
- *                                                                           *
- * NOTES:                                                                    *
- * Functions in this file should only be used by the developer.              *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
 #include <stdio.h>
 
 #include "structs.h"
@@ -26,8 +9,8 @@
  * @param vec The vector to operate on.
  * @param beg The index to begin at
  * */
-struct elem_t *
-iter_begin (vec_t *vec, size_t beg)
+struct __sll_elem_t *
+__cdsa_sll_iter_begin (cdsa_sll_t vec, size_t beg)
 {
     if (beg >= vec->size) {
         perror ("[ \033[1;31mFAILED\033[0m ] iter_begin: requested position "
@@ -35,9 +18,10 @@ iter_begin (vec_t *vec, size_t beg)
         return NULL;
     }
 
-    struct elem_t *iter = vec->front;
-    for (size_t i = 0; i < beg; ++i) {
+    struct __sll_elem_t *iter = vec->front;
+
+    for (size_t i = 0; i < beg; ++i)
         iter = iter->next;
-    }
+
     return iter;
 }

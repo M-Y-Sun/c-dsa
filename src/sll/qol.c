@@ -1,29 +1,9 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * FILE NAME:                                                                *
- * qol.c                                                                     *
- *                                                                           *
- * PURPOSE:                                                                  *
- * Includes functions that improve the user experience.                      *
- *                                                                           *
- * EXTERNAL REFERENCES:                                                      *
- * 'size_t' type            (from <stdlib.h>)                                *
- * 'printf' function        (from <stdio.h>)                                 *
- * 'perror' function        (from <stdio.h>)                                 *
- * 'LLONG_MAX' value        (from <limits.h>)                                *
- * 'vec_t' struct             (from "structs.h")                             *
- * 'elem_t' struct            (from "structs.h")                             *
- * 'iter_begin' function    (from "devhelper.h")                             *
- *                                                                           *
- * NOTES:                                                                    *
- * Such functions do not exist for C++ vectors.                              *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
 #include <limits.h>
 #include <stdio.h>
 
 #include "devhelper.h"
+#include "sll.h"
 #include "structs.h"
-#include "vector.h"
 
 /**
  * Checks if the specified beginning and ending index is within the bounds of
@@ -32,7 +12,7 @@
  * @param end The ending index
  */
 static inline int
-inbound_v_ (vec_t *vec, size_t beg, size_t end)
+__in_bound (cdsa_sll_t vec, size_t beg, size_t end)
 {
     return beg < 0 || end < 0 || beg > vec->size || end > vec->size
            || beg > end;
@@ -47,15 +27,15 @@ inbound_v_ (vec_t *vec, size_t beg, size_t end)
  * @param end The ending index
  * */
 void
-print_v (vec_t *vec, size_t beg, size_t end)
+cdsa_sll_print (cdsa_sll_t vec, size_t beg, size_t end)
 {
-    if (inbound_v_ (vec, beg, end)) {
-        perror ("[ \033[1;31mFAILED\033[0m ] print_v: requested position out "
+    if (__in_bound (vec, beg, end)) {
+        perror ("[ \033[1;31mFAILED\033[0m ] print: requested position out "
                 "of bounds");
         return;
     }
 
-    struct elem_t *iter = iter_begin (vec, beg);
+    struct __sll_elem_t *iter = __cdsa_sll_iter_begin (vec, beg);
 
     printf ("[ ");
     for (size_t i = beg; i < end; ++i) {
@@ -76,15 +56,15 @@ print_v (vec_t *vec, size_t beg, size_t end)
  * @param end The ending index
  * */
 int64_t
-sum_v (vec_t *vec, size_t beg, size_t end)
+cdsa_sll_sum (cdsa_sll_t vec, size_t beg, size_t end)
 {
-    if (inbound_v_ (vec, beg, end)) {
-        perror ("[ \033[1;31mFAILED\033[0m ] sum_v: requested position out of "
+    if (__in_bound (vec, beg, end)) {
+        perror ("[ \033[1;31mFAILED\033[0m ] sum: requested position out of "
                 "bounds");
         return 0;
     }
 
-    struct elem_t *iter = iter_begin (vec, beg);
+    struct __sll_elem_t *iter = __cdsa_sll_iter_begin (vec, beg);
     int64_t sum = 0;
 
     for (size_t i = beg; i < end; ++i) {
@@ -101,15 +81,15 @@ sum_v (vec_t *vec, size_t beg, size_t end)
  * @param end The ending index
  * */
 int64_t
-prod_v (vec_t *vec, size_t beg, size_t end)
+cdsa_sll_prod (cdsa_sll_t vec, size_t beg, size_t end)
 {
-    if (inbound_v_ (vec, beg, end)) {
-        perror ("[ \033[1;31mFAILED\033[0m ] prod_v: requested position out "
+    if (__in_bound (vec, beg, end)) {
+        perror ("[ \033[1;31mFAILED\033[0m ] prod: requested position out "
                 "of bounds");
         return 0;
     }
 
-    struct elem_t *iter = iter_begin (vec, beg);
+    struct __sll_elem_t *iter = __cdsa_sll_iter_begin (vec, beg);
     int64_t prod = 1;
 
     for (size_t i = beg; i < end; ++i) {
