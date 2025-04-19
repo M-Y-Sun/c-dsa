@@ -40,11 +40,8 @@ dkms.conf
 # macOS system files
 .DS_store/
 
-# Debug files
-dbg/
-
-# Executable binaries
-bin/
+# Compile output
+c-out/
 
 # compile commands
 compile_commands.json

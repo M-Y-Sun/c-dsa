@@ -1,24 +1,37 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * FILE NAME:                                                                *
- * main.c                                                                    *
- *                                                                           *
- * PURPOSE:                                                                  *
- * Demonstration for all available functions.                                *
- *                                                                           *
- * EXTERNAL REFERENCES:                                                      *
- * all functions declared in "vector.h"                                      *
- * 'printf' function        (from <stdio.h>)                                 *
- * 'malloc' function        (from <stdlib.h>)                                *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
+#include "heap.h"
 #include "vector.h"
 
 int
 main (void)
 {
+    cdsa_heap_t heap;
+    cdsa_heap_init (heap, 3);
+
+    cdsa_heap_insert (heap, 8);
+    printf ("min after insert 8: %lld\n", cdsa_heap_min (heap));
+
+    cdsa_heap_insert (heap, 6);
+    printf ("min after insert 6: %lld\n", cdsa_heap_min (heap));
+
+    cdsa_heap_insert (heap, 10);
+    printf ("min after insert 10: %lld\n", cdsa_heap_min (heap));
+
+    cdsa_heap_expand (heap, 7);
+
+    cdsa_heap_insert (heap, 2);
+    printf ("min after insert 10: %lld\n", cdsa_heap_min (heap));
+
+    cdsa_heap_delete (heap);
+    printf ("min after extract: %lld\n", cdsa_heap_min (heap));
+
+    cdsa_heap_deinit (heap);
+
+    puts ("--------");
+
     vec_t *vector = (vec_t *)malloc (sizeof (vec_t));
     setup_v (vector); // set up the vector
     printf ("[   \033[1;32mOK\033[0m   ] setup finished\n");
