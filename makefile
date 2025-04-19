@@ -49,14 +49,14 @@ default: $(MAIN)
 
 so: $(MAIN)
 	$(MKDIRS)
-	for dir in $(SRC_DIR)/*/; do dir=$${dir%*/}; clang -shared -undefined dynamic_lookup $$(find $$dir -type f -name '*.c') -o $(C_OUT)/lib/lib$${dir##*/}.so $(CFLAGS); done
+	for dir in $(SRC_DIR)/*/; do dir=$${dir%*/}; clang -shared -fpic $$(find $$dir -type f -name '*.c') -o $(C_OUT)/lib/lib$${dir##*/}.so $(CFLAGS) -Wl,-install_name,lib/lib$${dir##*/}.so; done
 	$(REPLACE_FILES)
 	$(PRUNE)
 
 all:
 	$(MKDIRS)
 	$(CCPFX) -$(OPTIMIZE)
-	for dir in $(SRC_DIR)/*/; do dir=$${dir%*/}; clang -shared -undefined dynamic_lookup $$(find $$dir -type f -name '*.c') -o $(C_OUT)/lib/lib$${dir##*/}.so $(CFLAGS); done
+	for dir in $(SRC_DIR)/*/; do dir=$${dir%*/}; clang -shared -undefined dynamic_lookup $$(find $$dir -type f -name '*.c') -o $(C_OUT)/lib/lib$${dir##*/}.so $(CFLAGS) -Wl,-install_name,lib/lib$${dir##*/}.so; done
 	$(REPLACE_FILES)
 	$(PRUNE)
 
