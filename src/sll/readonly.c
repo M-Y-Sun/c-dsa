@@ -11,14 +11,14 @@ cdsa_sll_size (cdsa_sll_t vec)
 }
 
 /** @return A pointer to the first value */
-int
+__sll_data_t
 cdsa_sll_front (cdsa_sll_t vec)
 {
     return vec->front->data;
 }
 
 /** @return A pointer to the last value */
-int
+__sll_data_t
 cdsa_sll_back (cdsa_sll_t vec)
 {
     struct __sll_elem_t *iter = vec->front;
@@ -30,7 +30,7 @@ cdsa_sll_back (cdsa_sll_t vec)
 }
 
 /** @return If the vector is empty */
-int
+__sll_data_t
 cdsa_sll_empty (cdsa_sll_t vec)
 {
     return vec->front == NULL;

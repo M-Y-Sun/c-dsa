@@ -23,9 +23,12 @@ bubble_up_ (volatile const cdsa_heap_t heap, size_t pos)
         return;
 
     size_t pa_pos;
+    int c;
 
-    while (pos != CDSA_HEAP_ROOT_POS
-           && heap->c_[pos] < heap->c_[pa_pos = pa_ (pos)]) {
+    while (
+        pos != CDSA_HEAP_ROOT_POS
+        && (c = heap->compar_ (&heap->c_[pos], &heap->c_[pa_pos = pa_ (pos)]))
+               < 0) {
         heap_swap_ (heap, pos, pa_pos);
         pos = pa_pos;
     }
@@ -42,23 +45,46 @@ bubble_down_ (volatile const cdsa_heap_t heap, size_t pos)
     chd_pos += (chd_pos + 1 < heap->next_
                 && heap->c_[chd_pos] > heap->c_[chd_pos + 1]);
 
-    if (heap->c_[pos] <= heap->c_[chd_pos])
+    if (heap->compar_ (&heap->c_[pos], &heap->c_[chd_pos]) <= 0)
         return;
 
     heap_swap_ (heap, pos, chd_pos);
     bubble_down_ (heap, chd_pos);
 }
 
-void
+static int
+__lt (const void *p_lhs, const void *p_rhs)
+{
+    return *(__heap_val_t *)p_lhs - *(__heap_val_t *)p_rhs;
+}
+
+/**
+ * @return The number of bytes allocated, 0 on error (`errno` is set)
+ */
+size_t
 cdsa_heap_init (volatile cdsa_heap_t this, size_t max_sz)
 {
-    this->c_ = malloc (max_sz * sizeof (__heap_val_t));
+    return cdsa_heap_init_compar (this, max_sz, __lt);
+}
+
+/**
+ * @return The number of bytes allocated, 0 on error (`errno` is set)
+ */
+size_t
+cdsa_heap_init_compar (volatile cdsa_heap_t this, size_t maxsiz,
+                       int (*compar) (const void *, const void *))
+{
+    if ((this->c_ = malloc (maxsiz * sizeof (__heap_val_t))) == NULL)
+        return 0;
+
     this->next_ = 0;
+    this->compar_ = compar;
+
+    return maxsiz;
 }
 
 void
-cdsa_heap_init_arr (volatile cdsa_heap_t this, __heap_val_t *arr,
-                    size_t len)
+cdsa_heap_init_arr (volatile cdsa_heap_t this, __heap_val_t *arr, size_t len)
 {
     this->c_ = arr;
 
@@ -67,10 +93,16 @@ cdsa_heap_init_arr (volatile cdsa_heap_t this, __heap_val_t *arr,
     }
 }
 
-void
-cdsa_heap_expand (volatile cdsa_heap_t this, size_t new_sz)
+/**
+ * @return The number of bytes allocated, 0 on error (`errno` is set)
+ */
+size_t
+cdsa_heap_expand (volatile cdsa_heap_t this, size_t siz)
 {
-    this->c_ = realloc (this->c_, new_sz);
+    if ((this->c_ = realloc (this->c_, siz * sizeof (__heap_val_t))) == NULL)
+        return 0;
+
+    return siz;
 }
 
 void cdsa_heap_deinit (volatile cdsa_heap_t this)
@@ -80,7 +112,7 @@ void cdsa_heap_deinit (volatile cdsa_heap_t this)
 }
 
 __heap_val_t
-cdsa_heap_min (volatile const cdsa_heap_t this)
+cdsa_heap_top (volatile const cdsa_heap_t this)
 {
     return this->c_[0];
 }
@@ -109,7 +141,7 @@ cdsa_heap_replace_always (volatile const cdsa_heap_t this, __heap_val_t v)
 void
 cdsa_heap_replace_first (volatile const cdsa_heap_t this, __heap_val_t v)
 {
-    if (v <= root_ (this))
+    if (this->compar_ (&v, &root_ (this)) <= 0)
         return;
 
     root_ (this) = v;

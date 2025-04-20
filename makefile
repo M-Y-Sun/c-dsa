@@ -83,26 +83,9 @@ so: $(MAIN)
 	echo "Output dumped to \`$(C_OUT)/lib/'"
 
 all:
-	$(MKDIRS)
-	$(CCPFX) -$(OPTIMIZE)
-	for dir in $(SRC_DIR)/*/; do \
-		dir=$${dir%*/}; \
-		dirn=$${dir##*/}; \
-		mkdir tmp && cd tmp; \
-		clang -c -fPIC $$(find ../$$dir -type f -name '*.c') $$(find ../include -type d | sed 's/^/-I.\//') -Wall -Wextra -Wpedantic; \
-		cd ..; \
-		ar r $(C_OUT)/lib/lib$${dirn}.a $$(find tmp -type f); \
-		rm -r tmp; \
-		\
-		clang -shared -fPIC $$(find $$dir -type f -name '*.c') -o $(C_OUT)/lib/lib$${dirn}.so $(CFLAGS) -Wl,-install_name,lib/lib$${dirn}.so; \
-		\
-		echo "Created lib$${dirn}.a"; \
-		echo "Created lib$${dirn}.so"; \
-	done
-	$(REPLACE_FILES)
-	$(PRUNE)
-	echo "Binary dumped to \`$(C_OUT)/bin/'"
-	echo "Libraries dumped to \`$(C_OUT)/lib/'"
+	$(MAKE) fast
+	$(MAKE) a
+	$(MAKE) so
 
 fast: $(MAIN)
 	$(MKDIRS)
@@ -143,7 +126,7 @@ install:
 	else \
 		find $(C_OUT)/lib -type f -exec cp {} $(IPREFIX)/lib \; -exec echo Installed {} to $(IPREFIX)/lib/{} \;; \
 		mkdir -p $(IPREFIX)/include/c/c-dsa; \
-		find $(INCL_DIR) -type f -exec cp {} $(IPREFIX)/include/c/c-dsa \; -exec echo Installed {} to $(IPREFIX)/include/c/c-dsa/{} \;; \
+		find $(INCL_DIR) -type f -exec $(SHELL) -c 'loc=$(IPREFIX)/include/c/c-dsa/$$(echo {} | sed "s:^$(INCL_DIR)\/::" | sed "s:/.*$$::"); mkdir -p $$loc; cp {} $$loc' \; -exec echo Installed {} to $(IPREFIX)/include/c/c-dsa/ \;; \
 	fi
 	echo 'All done'
 

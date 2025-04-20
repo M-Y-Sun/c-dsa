@@ -3,11 +3,14 @@
 #ifndef SLL_STRUCTS_H
 #define SLL_STRUCTS_H
 
+#include <stdint.h>
 #include <stdlib.h>
+
+typedef uint64_t __sll_data_t;
 
 /** A single element in a vector */
 struct __sll_elem_t {
-    int data;
+    __sll_data_t data;
     struct __sll_elem_t *next;
 };
 

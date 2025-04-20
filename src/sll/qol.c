@@ -11,7 +11,7 @@
  * @param beg The beginning index
  * @param end The ending index
  */
-static inline int
+static inline __sll_data_t
 __in_bound (cdsa_sll_t vec, size_t beg, size_t end)
 {
     return beg < 0 || end < 0 || beg > vec->size || end > vec->size
@@ -40,9 +40,9 @@ cdsa_sll_print (cdsa_sll_t vec, size_t beg, size_t end)
     printf ("[ ");
     for (size_t i = beg; i < end; ++i) {
         if (i != end - 1)
-            printf ("%d , ", iter->data);
+            printf ("%llu , ", iter->data);
         else
-            printf ("%d", iter->data);
+            printf ("%llu", iter->data);
 
         iter = iter->next;
     }

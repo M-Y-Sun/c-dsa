@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/_pthread/_pthread_types.h>
 
 #include "devhelper.h"
@@ -35,7 +36,7 @@ cdsa_sll_clear (cdsa_sll_t vec)
  * @param data The data to assign each element to
  * */
 void
-cdsa_sll_assign (cdsa_sll_t vec, size_t size, int data)
+cdsa_sll_assign (cdsa_sll_t vec, size_t size, __sll_data_t data)
 {
     // if size is negative or too large that it overflows the size limit
     if (size < 0 || size > SIZE_MAX) {
@@ -79,7 +80,7 @@ cdsa_sll_assign (cdsa_sll_t vec, size_t size, int data)
  * @param data The data to assign each new value to
  * */
 void
-cdsa_sll_resize (cdsa_sll_t vec, size_t size, int data)
+cdsa_sll_resize (cdsa_sll_t vec, size_t size, __sll_data_t data)
 {
     // if size is negative or too large that it overflows the size_t limit
     if (size < 0 || size > SIZE_MAX) {
@@ -110,7 +111,7 @@ cdsa_sll_resize (cdsa_sll_t vec, size_t size, int data)
  * @param data The data to append
  * */
 void
-cdsa_sll_pushb (cdsa_sll_t vec, int data)
+cdsa_sll_pushb (cdsa_sll_t vec, __sll_data_t data)
 {
     struct __sll_elem_t *new
         = (struct __sll_elem_t *)malloc (sizeof (struct __sll_elem_t));
@@ -146,7 +147,7 @@ cdsa_sll_pushb (cdsa_sll_t vec, int data)
  * @param pos The position to get
  * @return A pointer to the value at a certain location.
  * */
-int *
+__sll_data_t *
 cdsa_sll_get (cdsa_sll_t vec, size_t pos)
 {
     if (pos < 0 || pos >= vec->size) {
@@ -169,7 +170,7 @@ cdsa_sll_get (cdsa_sll_t vec, size_t pos)
  * @param data The data to insert
  * */
 struct __sll_elem_t *
-cdsa_sll_insert (cdsa_sll_t vec, size_t pos, int data)
+cdsa_sll_insert (cdsa_sll_t vec, size_t pos, __sll_data_t data)
 {
     if (pos < 0
         || pos >= vec->size) { // if position is negative or larger than the
@@ -219,7 +220,7 @@ cdsa_sll_swap (cdsa_sll_t vec, size_t i1, size_t i2)
 
     // make i1 always smaller than i2
     if (i1 > i2) {
-        int tmp = i1;
+        __sll_data_t tmp = i1;
         i1 = i2;
         i2 = tmp;
     }
@@ -229,12 +230,12 @@ cdsa_sll_swap (cdsa_sll_t vec, size_t i1, size_t i2)
     // get to the first index and read value
     struct __sll_elem_t *iter = __cdsa_sll_iter_begin (vec, i1);
 
-    int data1 = iter->data;
+    __sll_data_t data1 = iter->data;
 
     for (size_t i = i1; i < i2; ++i)
         iter = iter->next;
 
-    int data2 = iter->data;
+    __sll_data_t data2 = iter->data;
 
     // set the data
 
@@ -280,7 +281,7 @@ cdsa_sll_erase (cdsa_sll_t vec, size_t pos)
  * Removes the last element.
  * @return The data stored by the popped value.
  * */
-int
+__sll_data_t
 cdsa_sll_popb (cdsa_sll_t vec)
 {
     if (vec->size == 0) {
@@ -291,7 +292,7 @@ cdsa_sll_popb (cdsa_sll_t vec)
 
     // get iterator to the last element
     struct __sll_elem_t *p_rm = __cdsa_sll_iter_begin (vec, vec->size - 1);
-    int val = p_rm->data;
+    __sll_data_t val = p_rm->data;
 
     free (p_rm);
     --(vec->size);
@@ -303,7 +304,7 @@ cdsa_sll_popb (cdsa_sll_t vec)
  * Removes the first element.
  * @return The data stored by the popped value.
  * */
-int
+__sll_data_t
 cdsa_sll_popf (cdsa_sll_t vec)
 {
     if (vec->size == 0) {
@@ -315,7 +316,7 @@ cdsa_sll_popf (cdsa_sll_t vec)
     // set the front equal to the next element
     struct __sll_elem_t *p_rm = vec->front;
     vec->front = vec->front->next;
-    int val = p_rm->data;
+    __sll_data_t val = p_rm->data;
 
     free (p_rm);
     --(vec->size);
@@ -323,10 +324,34 @@ cdsa_sll_popf (cdsa_sll_t vec)
     return val;
 }
 
-static void
-__swap (int *a, int *b)
+void
+cdsa_sll_sort (cdsa_sll_t this, int (*compar) (const void *, const void *))
 {
-    int tmp = *a;
+    __sll_data_t *arr = malloc (this->size * sizeof (__sll_data_t));
+
+    struct __sll_elem_t *node = this->front;
+
+    for (size_t i = 0; i < this->size; ++i) {
+        arr[i] = node->data;
+        node = node->next;
+    }
+
+    qsort (arr, this->size, sizeof (__sll_data_t), compar);
+
+    node = this->front;
+
+    for (size_t i = 0; i < this->size; ++i) {
+        node->data = arr[i];
+        node = node->next;
+    }
+
+    free (arr);
+}
+
+static void
+__swap (__sll_data_t *a, __sll_data_t *b)
+{
+    __sll_data_t tmp = *a;
     *a = *b;
     *b = tmp;
 }
@@ -334,8 +359,8 @@ __swap (int *a, int *b)
 #define pred(x) ((x) < pivot || (le && (x) == pivot))
 
 static struct __sll_elem_t *
-__partition (struct __sll_elem_t *head, struct __sll_elem_t *tail, int pivot,
-             bool le)
+__partition (struct __sll_elem_t *head, struct __sll_elem_t *tail,
+             __sll_data_t pivot, bool le)
 {
     struct __sll_elem_t *mid = head;
 
@@ -355,13 +380,15 @@ __partition (struct __sll_elem_t *head, struct __sll_elem_t *tail, int pivot,
     return mid;
 }
 
+#undef pred
+
 static void
 __sll_quicksort (struct __sll_elem_t *head, struct __sll_elem_t *tail)
 {
     if (head == tail)
         return;
 
-    int pivot = head->data;
+    __sll_data_t pivot = head->data;
     struct __sll_elem_t *mid1 = __partition (head, tail, pivot, false);
     struct __sll_elem_t *mid2 = __partition (mid1, tail, pivot, true);
 
@@ -370,7 +397,7 @@ __sll_quicksort (struct __sll_elem_t *head, struct __sll_elem_t *tail)
 }
 
 void
-cdsa_sll_sort_inplace (cdsa_sll_t this)
+cdsa_sll_sort_inplace_lt (cdsa_sll_t this)
 {
     __sll_quicksort (this->front, NULL);
 }
