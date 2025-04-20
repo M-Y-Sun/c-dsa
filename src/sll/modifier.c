@@ -1,4 +1,6 @@
+#include <stdbool.h>
 #include <stdio.h>
+#include <sys/_pthread/_pthread_types.h>
 
 #include "devhelper.h"
 #include "sll.h"
@@ -319,4 +321,56 @@ cdsa_sll_popf (cdsa_sll_t vec)
     --(vec->size);
 
     return val;
+}
+
+static void
+__swap (int *a, int *b)
+{
+    int tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
+
+#define pred(x) ((x) < pivot || (le && (x) == pivot))
+
+static struct __sll_elem_t *
+__partition (struct __sll_elem_t *head, struct __sll_elem_t *tail, int pivot,
+             bool le)
+{
+    struct __sll_elem_t *mid = head;
+
+    for (; mid != tail && pred (mid->data); mid = mid->next)
+        ;
+
+    if (mid == tail)
+        return mid;
+
+    for (struct __sll_elem_t *r = mid->next; r != tail; r = r->next) {
+        if (pred (r->data)) {
+            __swap (&r->data, &mid->data);
+            mid = mid->next;
+        }
+    }
+
+    return mid;
+}
+
+static void
+__sll_quicksort (struct __sll_elem_t *head, struct __sll_elem_t *tail)
+{
+    if (head == tail)
+        return;
+
+    int pivot = head->data;
+    struct __sll_elem_t *mid1 = __partition (head, tail, pivot, false);
+    struct __sll_elem_t *mid2 = __partition (mid1, tail, pivot, true);
+
+    __sll_quicksort (head, mid1);
+    __sll_quicksort (mid2, tail);
+}
+
+void
+cdsa_sll_sort_inplace (cdsa_sll_t this)
+{
+    __sll_quicksort (this->front, NULL);
 }

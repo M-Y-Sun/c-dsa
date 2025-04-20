@@ -91,6 +91,10 @@ int cdsa_sll_popb (cdsa_sll_t vec);
  * */
 int cdsa_sll_popf (cdsa_sll_t vec);
 
+void cdsa_sll_sort (cdsa_sll_t this);
+
+void cdsa_sll_sort_inplace (cdsa_sll_t this);
+
 /****** QUALITY OF LIFE FUNCTIONS (READ ONLY) ******/
 
 /**
@@ -102,6 +106,8 @@ int cdsa_sll_popf (cdsa_sll_t vec);
  * @param end The ending index
  * */
 void cdsa_sll_print (cdsa_sll_t vec, size_t beg, size_t end);
+
+void cdsa_sll_print_all (cdsa_sll_t vec);
 
 /**
  * @return The sum of the elements of a vector in a certain range [beg, end).

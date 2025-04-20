@@ -77,6 +77,16 @@ main (void)
     cdsa_sll_resize (sll, 3, -1);
     printf ("size after second resize: %lu\n", cdsa_sll_size (sll));
 
+    cdsa_sll_swap (sll, 1, 2);
+    cdsa_sll_pushb (sll, 6);
+    cdsa_sll_pushb (sll, 1);
+    cdsa_sll_pushb (sll, 16);
+    cdsa_sll_pushb (sll, 5);
+    cdsa_sll_pushb (sll, 8);
+    cdsa_sll_print_all (sll);
+    cdsa_sll_sort_inplace (sll);
+    cdsa_sll_print_all (sll);
+
     // gets the first and last value respectively
     printf ("(first value, last value): (%d, %d)\n", cdsa_sll_front (sll),
             cdsa_sll_back (sll));
@@ -84,14 +94,14 @@ main (void)
     printf ("elements 0 to 1: ");
     cdsa_sll_print (sll, 0, 2);
     printf ("final sll: ");
-    cdsa_sll_print (sll, 0, cdsa_sll_size (sll));
+    cdsa_sll_print_all (sll);
     // computes the sum of the elements in a certain range, returns int64_t
     printf ("sum of all elements: %lld\n",
             cdsa_sll_sum (sll, 0, cdsa_sll_size (sll)));
 
     // computes the product of all the elements in a certain range, returns
     // int64_t
-    printf ("product of elements 1 to 2: %lld\n",
+    printf ("product of elements 1 to end: %lld\n",
             cdsa_sll_prod (sll, 1, cdsa_sll_size (sll)));
 
     cdsa_sll_deinit (sll); // clean up sll and free memory

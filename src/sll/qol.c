@@ -50,6 +50,12 @@ cdsa_sll_print (cdsa_sll_t vec, size_t beg, size_t end)
     printf (" ]\n");
 }
 
+void
+cdsa_sll_print_all (cdsa_sll_t this)
+{
+    cdsa_sll_print (this, 0, this->size);
+}
+
 /**
  * @return The sum of the elements of a vector in a certain range [beg, end).
  * @param beg The beginning index
