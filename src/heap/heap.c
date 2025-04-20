@@ -9,7 +9,7 @@
 #define pa_(i)   (((i)-1 - (((i) & 1) ^ 1)) >> 1)
 
 static void
-heap_swap_ (const cdsa_heap_t heap, size_t i, size_t j)
+__heap_swap (const cdsa_heap_t heap, size_t i, size_t j)
 {
     __heap_val_t tmp = heap->c_[i];
     heap->c_[i] = heap->c_[j];
@@ -17,7 +17,7 @@ heap_swap_ (const cdsa_heap_t heap, size_t i, size_t j)
 }
 
 static void
-bubble_up_ (const cdsa_heap_t heap, size_t pos)
+__bubble_up (const cdsa_heap_t heap, size_t pos)
 {
     if (pos == 0)
         return;
@@ -29,27 +29,27 @@ bubble_up_ (const cdsa_heap_t heap, size_t pos)
         pos != CDSA_HEAP_ROOT_POS
         && (c = heap->compar_ (&heap->c_[pos], &heap->c_[pa_pos = pa_ (pos)]))
                < 0) {
-        heap_swap_ (heap, pos, pa_pos);
+        __heap_swap (heap, pos, pa_pos);
         pos = pa_pos;
     }
 }
 
 static void
-bubble_down_ (const cdsa_heap_t heap, size_t pos)
+__bubble_down (const cdsa_heap_t heap, size_t pos)
 {
     size_t chd_pos = lc_ (pos);
 
-    if (chd_pos >= heap->next_)
+    if (chd_pos >= heap->size)
         return;
 
-    chd_pos += (chd_pos + 1 < heap->next_
+    chd_pos += (chd_pos + 1 < heap->size
                 && heap->c_[chd_pos] > heap->c_[chd_pos + 1]);
 
     if (heap->compar_ (&heap->c_[pos], &heap->c_[chd_pos]) <= 0)
         return;
 
-    heap_swap_ (heap, pos, chd_pos);
-    bubble_down_ (heap, chd_pos);
+    __heap_swap (heap, pos, chd_pos);
+    __bubble_down (heap, chd_pos);
 }
 
 static int
@@ -77,7 +77,7 @@ cdsa_heap_init_compar (cdsa_heap_t this, size_t maxsiz,
     if ((this->c_ = malloc (maxsiz * sizeof (__heap_val_t))) == NULL)
         return 0;
 
-    this->next_ = 0;
+    this->size = 0;
     this->compar_ = compar;
 
     return maxsiz;
@@ -86,11 +86,18 @@ cdsa_heap_init_compar (cdsa_heap_t this, size_t maxsiz,
 void
 cdsa_heap_init_arr (cdsa_heap_t this, __heap_val_t *arr, size_t len)
 {
-    this->c_ = arr;
+    cdsa_heap_init_arr_compar (this, arr, len, __lt);
+}
 
-    for (size_t i = (len >> 1) - 1; i >= 0; --i) {
-        bubble_down_ (this, i);
-    }
+void
+cdsa_heap_init_arr_compar (cdsa_heap_t this, __heap_val_t *arr, size_t len,
+                           int (*compar) (const void *, const void *))
+{
+    this->c_ = arr;
+    this->compar_ = compar;
+
+    for (size_t i = (len >> 1) - 1; i >= 0; --i)
+        __bubble_down (this, i);
 }
 
 /**
@@ -121,23 +128,23 @@ cdsa_heap_top (const cdsa_heap_t this)
 void
 cdsa_heap_insert (cdsa_heap_t this, __heap_val_t v)
 {
-    size_t pos = this->next_++;
+    size_t pos = this->size++;
     this->c_[pos] = v;
-    bubble_up_ (this, pos);
+    __bubble_up (this, pos);
 }
 
 void
 cdsa_heap_delete (cdsa_heap_t this)
 {
-    heap_swap_ (this, CDSA_HEAP_ROOT_POS, --this->next_);
-    bubble_down_ (this, CDSA_HEAP_ROOT_POS);
+    __heap_swap (this, CDSA_HEAP_ROOT_POS, --this->size);
+    __bubble_down (this, CDSA_HEAP_ROOT_POS);
 }
 
 void
 cdsa_heap_replace_always (const cdsa_heap_t this, __heap_val_t v)
 {
     root_ (this) = v;
-    bubble_down_ (this, CDSA_HEAP_ROOT_POS);
+    __bubble_down (this, CDSA_HEAP_ROOT_POS);
 }
 
 void
@@ -147,7 +154,7 @@ cdsa_heap_replace_first (const cdsa_heap_t this, __heap_val_t v)
         return;
 
     root_ (this) = v;
-    bubble_down_ (this, CDSA_HEAP_ROOT_POS);
+    __bubble_down (this, CDSA_HEAP_ROOT_POS);
 }
 
 #undef pa_

@@ -11,8 +11,9 @@
 typedef int64_t __heap_val_t;
 
 typedef struct {
+    size_t size;
+
     __heap_val_t *c_;
-    size_t next_;
     int (*compar_) (const void *, const void *);
 } cdsa_heap_t[1];
 
@@ -21,6 +22,9 @@ typedef struct {
  */
 extern size_t cdsa_heap_init (cdsa_heap_t this, size_t max_sz);
 
+extern void cdsa_heap_init_arr (cdsa_heap_t this, __heap_val_t *arr,
+                                size_t len);
+
 /**
  * @return The number of bytes allocated, 0 on error (`errno` is set)
  */
@@ -28,8 +32,9 @@ extern size_t cdsa_heap_init_compar (cdsa_heap_t this, size_t max_sz,
                                      int (*compar) (const void *,
                                                     const void *));
 
-extern void cdsa_heap_init_arr (cdsa_heap_t this, __heap_val_t *arr,
-                                size_t len);
+extern void
+cdsa_heap_init_arr_compar (cdsa_heap_t this, __heap_val_t *arr, size_t len,
+                           int (*compar) (const void *, const void *));
 
 /**
  * @return The number of bytes allocated, 0 on error (`errno` is set)

@@ -120,13 +120,15 @@ clean:
 	if [ -f compile_commands.json ]; then rm -r compile_commands.json; echo 'Removed compile_commands.json'; fi
 	echo 'Build clean'
 
+IINCL_DIR=c_dsa
+
 install: 
 	if [ ! -d $(C_OUT) ] || [ ! -d $(C_OUT)/lib ]; then \
 		echo 'Nothing to install'; \
 	else \
 		find $(C_OUT)/lib -type f -exec cp {} $(IPREFIX)/lib \; -exec echo Installed {} to $(IPREFIX)/lib/{} \;; \
-		mkdir -p $(IPREFIX)/include/c/c-dsa; \
-		find $(INCL_DIR) -type f -exec $(SHELL) -c 'loc=$(IPREFIX)/include/c/c-dsa/$$(echo {} | sed "s:^$(INCL_DIR)\/::" | sed "s:/.*$$::"); mkdir -p $$loc; cp {} $$loc' \; -exec echo Installed {} to $(IPREFIX)/include/c/c-dsa/ \;; \
+		mkdir -p $(IPREFIX)/include/c/$(IINCL_DIR); \
+		find $(INCL_DIR) -type f -exec $(SHELL) -c 'loc=$(IPREFIX)/include/c/$(IINCL_DIR)/$$(echo {} | sed "s:^$(INCL_DIR)\/::" | sed "s:/.*$$::"); mkdir -p $$loc; cp {} $$loc' \; -exec echo Installed {} to $(IPREFIX)/include/c/$(IINCL_DIR)/ \;; \
 	fi
 	echo 'All done'
 
@@ -143,5 +145,5 @@ uninstall:
 			echo "Uninstalled $${name}.so"; \
 		fi; \
 	done
-	rm -rv $(IPREFIX)/include/c/c-dsa | sed 's/^/Uninstalled /'
+	rm -rv $(IPREFIX)/include/c/$(IINCL_DIR) | sed 's/^/Uninstalled /'
 	echo 'All done'
