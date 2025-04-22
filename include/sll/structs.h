@@ -15,9 +15,11 @@ struct __sll_elem_t {
 };
 
 /** The vector type representing the beginning of the data structure. */
-typedef struct {
+typedef struct __sll_struct {
     size_t size;
     struct __sll_elem_t *front;
 } cdsa_sll_t[1];
+
+typedef struct __sll_struct *restrict cdsa_sll_restrict_ptr_t;
 
 #endif

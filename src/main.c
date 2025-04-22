@@ -16,6 +16,10 @@ main (void)
 {
     cdsa_heap_t heap;
 
+    // int init[] = { 0, 1, 2 };
+    // cdsa_heap_init_arr (heap, init, sizeof (init) / sizeof (init[0]),
+    //                     sizeof (init[0]));
+
     if (cdsa_heap_init (heap, 3) != 3) {
         perror ("malloc failed");
         return EXIT_FAILURE;

@@ -126,7 +126,7 @@ install:
 	if [ ! -d $(C_OUT) ] || [ ! -d $(C_OUT)/lib ]; then \
 		echo 'Nothing to install'; \
 	else \
-		find $(C_OUT)/lib -type f -exec cp {} $(IPREFIX)/lib \; -exec echo Installed {} to $(IPREFIX)/lib/{} \;; \
+		find $(C_OUT)/lib -type f -exec cp {} $(IPREFIX)/lib \; -exec echo Installed {} to $(IPREFIX)/lib/ \;; \
 		mkdir -p $(IPREFIX)/include/c/$(IINCL_DIR); \
 		find $(INCL_DIR) -type f -exec $(SHELL) -c 'loc=$(IPREFIX)/include/c/$(IINCL_DIR)/$$(echo {} | sed "s:^$(INCL_DIR)\/::" | sed "s:/.*$$::"); mkdir -p $$loc; cp {} $$loc' \; -exec echo Installed {} to $(IPREFIX)/include/c/$(IINCL_DIR)/ \;; \
 	fi

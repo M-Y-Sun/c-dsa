@@ -1,5 +1,6 @@
 #include <stddef.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "heap.h"
 
@@ -42,8 +43,10 @@ __bubble_down (const cdsa_heap_t heap, size_t pos)
     if (chd_pos >= heap->size)
         return;
 
+    // use rc = lc + 1 if rc is smaller
     chd_pos += (chd_pos + 1 < heap->size
-                && heap->c_[chd_pos] > heap->c_[chd_pos + 1]);
+                && heap->compar_ (&heap->c_[chd_pos], &heap->c_[chd_pos + 1]))
+               > 0;
 
     if (heap->compar_ (&heap->c_[pos], &heap->c_[chd_pos]) <= 0)
         return;
@@ -55,7 +58,9 @@ __bubble_down (const cdsa_heap_t heap, size_t pos)
 static int
 __lt (const void *p_lhs, const void *p_rhs)
 {
-    return *(__heap_val_t *)p_lhs - *(__heap_val_t *)p_rhs;
+    __heap_val_t lhs = *(const __heap_val_t *)p_lhs;
+    __heap_val_t rhs = *(const __heap_val_t *)p_rhs;
+    return (lhs > rhs) - (lhs < rhs);
 }
 
 /**
@@ -84,20 +89,30 @@ cdsa_heap_init_compar (cdsa_heap_t this, size_t maxsiz,
 }
 
 void
-cdsa_heap_init_arr (cdsa_heap_t this, __heap_val_t *arr, size_t len)
+cdsa_heap_init_arr (cdsa_heap_t this, const void *const arr, size_t siz,
+                    size_t width)
 {
-    cdsa_heap_init_arr_compar (this, arr, len, __lt);
+    cdsa_heap_init_arr_compar (this, arr, siz, width, __lt);
 }
 
 void
-cdsa_heap_init_arr_compar (cdsa_heap_t this, __heap_val_t *arr, size_t len,
+cdsa_heap_init_arr_compar (cdsa_heap_t this, const void *const arr, size_t siz,
+                           size_t width,
                            int (*compar) (const void *, const void *))
 {
-    this->c_ = arr;
+    // this->c_ = (__heap_val_t *)arr;
+    const size_t nbytes = siz * width;
+    this->c_ = malloc (nbytes);
+    memcpy (this->c_, arr, nbytes);
+    this->size = siz;
     this->compar_ = compar;
 
-    for (size_t i = (len >> 1) - 1; i >= 0; --i)
+    for (size_t i = (siz >> 1) - 1;; --i) {
         __bubble_down (this, i);
+
+        if (i == 0)
+            break;
+    }
 }
 
 /**

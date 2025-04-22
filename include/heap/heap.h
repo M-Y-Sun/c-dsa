@@ -10,31 +10,38 @@
 
 typedef int64_t __heap_val_t;
 
-typedef struct {
+typedef struct __heap_struct {
     size_t size;
 
     __heap_val_t *c_;
     int (*compar_) (const void *, const void *);
 } cdsa_heap_t[1];
 
+typedef struct __heap_struct *restrict cdsa_heap_restrict_ptr_t;
+
 /**
  * @return The number of bytes allocated, 0 on error (`errno` is set)
  */
 extern size_t cdsa_heap_init (cdsa_heap_t this, size_t max_sz);
 
-extern void cdsa_heap_init_arr (cdsa_heap_t this, __heap_val_t *arr,
-                                size_t len);
-
 /**
  * @return The number of bytes allocated, 0 on error (`errno` is set)
  */
-extern size_t cdsa_heap_init_compar (cdsa_heap_t this, size_t max_sz,
+extern size_t cdsa_heap_init_compar (cdsa_heap_t this, size_t maxsiz,
                                      int (*compar) (const void *,
                                                     const void *));
 
-extern void
-cdsa_heap_init_arr_compar (cdsa_heap_t this, __heap_val_t *arr, size_t len,
-                           int (*compar) (const void *, const void *));
+/**
+ * Initializes the heap with the elements pointed to by arr by calling malloc
+ * and memcpy. Original array is not modified.
+ */
+extern void cdsa_heap_init_arr (cdsa_heap_t this, const void *const arr,
+                                size_t siz, size_t width);
+
+extern void cdsa_heap_init_arr_compar (cdsa_heap_t this, const void *const arr,
+                                       size_t siz, size_t width,
+                                       int (*compar) (const void *,
+                                                      const void *));
 
 /**
  * @return The number of bytes allocated, 0 on error (`errno` is set)

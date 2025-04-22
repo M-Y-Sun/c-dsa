@@ -16,13 +16,16 @@ cdsa_sll_clear (cdsa_sll_t vec)
         free (vec->front);
         return;
     }
+
     struct __sll_elem_t *ptr1 = vec->front;
     struct __sll_elem_t *ptr2 = vec->front;
+
     for (size_t i = 0; i < vec->size; ++i) {
         ptr1 = ptr2;
         ptr2 = ptr1->next;
         free (ptr1);
     }
+
     if (ptr2 == NULL)
         free (ptr2);
 
