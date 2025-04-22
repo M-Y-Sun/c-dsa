@@ -8,7 +8,7 @@
  * EXTERNAL REFERENCES:                                                      *
  * 'size_t' type              (from <stdlib.h>)                              *
  * 'free' function            (from <stdlib.h>)                              *
- * 'cdsa_sll_t ' struct             (from 'structs.h') * '__sll_elem_t' struct
+ * 'cdsa_sll_t ' struct             (from 'structs.h') * '__cdsa_sll_elem_t' struct
  * (from 'structs.h')                             *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -35,8 +35,8 @@ cdsa_sll_deinit (cdsa_sll_t vec)
         return;
     }
 
-    struct __sll_elem_t *ptr1 = vec->front;
-    struct __sll_elem_t *ptr2 = vec->front;
+    struct __cdsa_sll_elem_t *ptr1 = vec->front;
+    struct __cdsa_sll_elem_t *ptr2 = vec->front;
 
     for (size_t i = 0; i < vec->size; ++i) {
         ptr1 = ptr2;

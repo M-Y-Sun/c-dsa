@@ -8,16 +8,16 @@
 
 #define CDSA_HEAP_ROOT_POS 0
 
-typedef int64_t __heap_val_t;
+typedef int64_t __cdsa_heap_val_t;
 
-typedef struct __heap_struct {
+typedef struct __cdsa_heap_struct {
     size_t size;
 
-    __heap_val_t *c_;
+    __cdsa_heap_val_t *c_;
     int (*compar_) (const void *, const void *);
 } cdsa_heap_t[1];
 
-typedef struct __heap_struct *restrict cdsa_heap_restrict_ptr_t;
+typedef struct __cdsa_heap_struct *restrict cdsa_heap_restrict_ptr_t;
 
 /**
  * @return The number of bytes allocated, 0 on error (`errno` is set)
@@ -50,14 +50,14 @@ extern size_t cdsa_heap_expand (cdsa_heap_t this, size_t new_sz);
 
 extern void cdsa_heap_deinit (cdsa_heap_t this);
 
-extern __heap_val_t cdsa_heap_top (const cdsa_heap_t this);
+extern __cdsa_heap_val_t cdsa_heap_top (const cdsa_heap_t this);
 
-extern void cdsa_heap_insert (cdsa_heap_t this, __heap_val_t v);
+extern void cdsa_heap_insert (cdsa_heap_t this, __cdsa_heap_val_t v);
 
 extern void cdsa_heap_delete (cdsa_heap_t this);
 
-extern void cdsa_heap_replace_always (const cdsa_heap_t this, __heap_val_t v);
+extern void cdsa_heap_replace_always (const cdsa_heap_t this, __cdsa_heap_val_t v);
 
-extern void cdsa_heap_replace_first (const cdsa_heap_t this, __heap_val_t v);
+extern void cdsa_heap_replace_first (const cdsa_heap_t this, __cdsa_heap_val_t v);
 
 #endif

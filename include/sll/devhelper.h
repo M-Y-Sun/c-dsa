@@ -13,6 +13,6 @@
  * @param vec The vector to operate on.
  * @param beg The index to begin at
  */
-struct __sll_elem_t *__cdsa_sll_iter_begin (cdsa_sll_t vec, size_t beg);
+struct __cdsa_sll_elem_t *__cdsa_sll_iter_begin (cdsa_sll_t vec, size_t beg);
 
 #endif

@@ -17,8 +17,8 @@ cdsa_sll_clear (cdsa_sll_t vec)
         return;
     }
 
-    struct __sll_elem_t *ptr1 = vec->front;
-    struct __sll_elem_t *ptr2 = vec->front;
+    struct __cdsa_sll_elem_t *ptr1 = vec->front;
+    struct __cdsa_sll_elem_t *ptr2 = vec->front;
 
     for (size_t i = 0; i < vec->size; ++i) {
         ptr1 = ptr2;
@@ -39,7 +39,7 @@ cdsa_sll_clear (cdsa_sll_t vec)
  * @param data The data to assign each element to
  * */
 void
-cdsa_sll_assign (cdsa_sll_t vec, size_t size, __sll_data_t data)
+cdsa_sll_assign (cdsa_sll_t vec, size_t size, __cdsa_sll_data_t data)
 {
     // if size is negative or too large that it overflows the size limit
     if (size < 0 || size > SIZE_MAX) {
@@ -53,18 +53,18 @@ cdsa_sll_assign (cdsa_sll_t vec, size_t size, __sll_data_t data)
         return;
 
     vec->size = size;
-    struct __sll_elem_t *new
-        = (struct __sll_elem_t *)malloc (sizeof (struct __sll_elem_t));
+    struct __cdsa_sll_elem_t *new
+        = (struct __cdsa_sll_elem_t *)malloc (sizeof (struct __cdsa_sll_elem_t));
     if (new == NULL) {
         perror ("[ \033[1;31mFAILED\033[0m ] malloc: memory request service "
                 "failed\n");
         return;
     }
     vec->front = new;
-    struct __sll_elem_t *iter = vec->front;
+    struct __cdsa_sll_elem_t *iter = vec->front;
     for (size_t i = 1; i < size; ++i) {
-        struct __sll_elem_t *new_next
-            = (struct __sll_elem_t *)malloc (sizeof (struct __sll_elem_t));
+        struct __cdsa_sll_elem_t *new_next
+            = (struct __cdsa_sll_elem_t *)malloc (sizeof (struct __cdsa_sll_elem_t));
         if (new_next == NULL) {
             perror ("[ \033[1;31mFAILED\033[0m ] malloc: memory request "
                     "service failed\n");
@@ -83,7 +83,7 @@ cdsa_sll_assign (cdsa_sll_t vec, size_t size, __sll_data_t data)
  * @param data The data to assign each new value to
  * */
 void
-cdsa_sll_resize (cdsa_sll_t vec, size_t size, __sll_data_t data)
+cdsa_sll_resize (cdsa_sll_t vec, size_t size, __cdsa_sll_data_t data)
 {
     // if size is negative or too large that it overflows the size_t limit
     if (size < 0 || size > SIZE_MAX) {
@@ -114,10 +114,10 @@ cdsa_sll_resize (cdsa_sll_t vec, size_t size, __sll_data_t data)
  * @param data The data to append
  * */
 void
-cdsa_sll_pushb (cdsa_sll_t vec, __sll_data_t data)
+cdsa_sll_pushb (cdsa_sll_t vec, __cdsa_sll_data_t data)
 {
-    struct __sll_elem_t *new
-        = (struct __sll_elem_t *)malloc (sizeof (struct __sll_elem_t));
+    struct __cdsa_sll_elem_t *new
+        = (struct __cdsa_sll_elem_t *)malloc (sizeof (struct __cdsa_sll_elem_t));
     if (new == NULL) {
         perror ("[ \033[1;31mFAILED\033[0m ] malloc: memory request service "
                 "failed\n");
@@ -130,8 +130,8 @@ cdsa_sll_pushb (cdsa_sll_t vec, __sll_data_t data)
         new->next = NULL;
     } else {
         // find the position
-        struct __sll_elem_t *cur = vec->front;
-        struct __sll_elem_t *prev = vec->front;
+        struct __cdsa_sll_elem_t *cur = vec->front;
+        struct __cdsa_sll_elem_t *prev = vec->front;
         for (size_t i = 0; i < vec->size; ++i) {
             prev = cur;
             cur = cur->next;
@@ -150,7 +150,7 @@ cdsa_sll_pushb (cdsa_sll_t vec, __sll_data_t data)
  * @param pos The position to get
  * @return A pointer to the value at a certain location.
  * */
-__sll_data_t *
+__cdsa_sll_data_t *
 cdsa_sll_get (cdsa_sll_t vec, size_t pos)
 {
     if (pos < 0 || pos >= vec->size) {
@@ -159,7 +159,7 @@ cdsa_sll_get (cdsa_sll_t vec, size_t pos)
         return 0;
     }
 
-    struct __sll_elem_t *iter = vec->front;
+    struct __cdsa_sll_elem_t *iter = vec->front;
     for (size_t i = 0; i < pos; ++i) {
         iter = iter->next;
     }
@@ -172,8 +172,8 @@ cdsa_sll_get (cdsa_sll_t vec, size_t pos)
  * @param pos The position to insert at
  * @param data The data to insert
  * */
-struct __sll_elem_t *
-cdsa_sll_insert (cdsa_sll_t vec, size_t pos, __sll_data_t data)
+struct __cdsa_sll_elem_t *
+cdsa_sll_insert (cdsa_sll_t vec, size_t pos, __cdsa_sll_data_t data)
 {
     if (pos < 0
         || pos >= vec->size) { // if position is negative or larger than the
@@ -184,14 +184,14 @@ cdsa_sll_insert (cdsa_sll_t vec, size_t pos, __sll_data_t data)
     }
 
     // get to insertion position
-    struct __sll_elem_t *iter = vec->front;
+    struct __cdsa_sll_elem_t *iter = vec->front;
     for (size_t i = 0; i < pos - 1; ++i) {
         iter = iter->next;
     }
 
     // set the values and link
-    struct __sll_elem_t *new
-        = (struct __sll_elem_t *)malloc (sizeof (struct __sll_elem_t));
+    struct __cdsa_sll_elem_t *new
+        = (struct __cdsa_sll_elem_t *)malloc (sizeof (struct __cdsa_sll_elem_t));
     if (new == NULL) {
         perror ("[ \033[1;31mFAILED\033[0m ] malloc: memory request service "
                 "failed\n");
@@ -223,7 +223,7 @@ cdsa_sll_swap (cdsa_sll_t vec, size_t i1, size_t i2)
 
     // make i1 always smaller than i2
     if (i1 > i2) {
-        __sll_data_t tmp = i1;
+        __cdsa_sll_data_t tmp = i1;
         i1 = i2;
         i2 = tmp;
     }
@@ -231,14 +231,14 @@ cdsa_sll_swap (cdsa_sll_t vec, size_t i1, size_t i2)
     // read the data
 
     // get to the first index and read value
-    struct __sll_elem_t *iter = __cdsa_sll_iter_begin (vec, i1);
+    struct __cdsa_sll_elem_t *iter = __cdsa_sll_iter_begin (vec, i1);
 
-    __sll_data_t data1 = iter->data;
+    __cdsa_sll_data_t data1 = iter->data;
 
     for (size_t i = i1; i < i2; ++i)
         iter = iter->next;
 
-    __sll_data_t data2 = iter->data;
+    __cdsa_sll_data_t data2 = iter->data;
 
     // set the data
 
@@ -269,13 +269,13 @@ cdsa_sll_erase (cdsa_sll_t vec, size_t pos)
     }
 
     // points to the address of the element to be removed
-    struct __sll_elem_t **indirect = &vec->front;
+    struct __cdsa_sll_elem_t **indirect = &vec->front;
 
     for (size_t i = 0; i < pos; ++i)
         indirect = &(*indirect)->next;
 
     // simply remove the element and free memory
-    struct __sll_elem_t *free_ptr = *indirect;
+    struct __cdsa_sll_elem_t *free_ptr = *indirect;
     *indirect = (*indirect)->next;
     free (free_ptr);
 }
@@ -284,7 +284,7 @@ cdsa_sll_erase (cdsa_sll_t vec, size_t pos)
  * Removes the last element.
  * @return The data stored by the popped value.
  * */
-__sll_data_t
+__cdsa_sll_data_t
 cdsa_sll_popb (cdsa_sll_t vec)
 {
     if (vec->size == 0) {
@@ -294,8 +294,8 @@ cdsa_sll_popb (cdsa_sll_t vec)
     }
 
     // get iterator to the last element
-    struct __sll_elem_t *p_rm = __cdsa_sll_iter_begin (vec, vec->size - 1);
-    __sll_data_t val = p_rm->data;
+    struct __cdsa_sll_elem_t *p_rm = __cdsa_sll_iter_begin (vec, vec->size - 1);
+    __cdsa_sll_data_t val = p_rm->data;
 
     free (p_rm);
     --(vec->size);
@@ -307,7 +307,7 @@ cdsa_sll_popb (cdsa_sll_t vec)
  * Removes the first element.
  * @return The data stored by the popped value.
  * */
-__sll_data_t
+__cdsa_sll_data_t
 cdsa_sll_popf (cdsa_sll_t vec)
 {
     if (vec->size == 0) {
@@ -317,9 +317,9 @@ cdsa_sll_popf (cdsa_sll_t vec)
     }
 
     // set the front equal to the next element
-    struct __sll_elem_t *p_rm = vec->front;
+    struct __cdsa_sll_elem_t *p_rm = vec->front;
     vec->front = vec->front->next;
-    __sll_data_t val = p_rm->data;
+    __cdsa_sll_data_t val = p_rm->data;
 
     free (p_rm);
     --(vec->size);
@@ -330,16 +330,16 @@ cdsa_sll_popf (cdsa_sll_t vec)
 void
 cdsa_sll_sort (cdsa_sll_t this, int (*compar) (const void *, const void *))
 {
-    __sll_data_t *arr = malloc (this->size * sizeof (__sll_data_t));
+    __cdsa_sll_data_t *arr = malloc (this->size * sizeof (__cdsa_sll_data_t));
 
-    struct __sll_elem_t *node = this->front;
+    struct __cdsa_sll_elem_t *node = this->front;
 
     for (size_t i = 0; i < this->size; ++i) {
         arr[i] = node->data;
         node = node->next;
     }
 
-    qsort (arr, this->size, sizeof (__sll_data_t), compar);
+    qsort (arr, this->size, sizeof (__cdsa_sll_data_t), compar);
 
     node = this->front;
 
@@ -352,20 +352,20 @@ cdsa_sll_sort (cdsa_sll_t this, int (*compar) (const void *, const void *))
 }
 
 static void
-__swap (__sll_data_t *a, __sll_data_t *b)
+__swap (__cdsa_sll_data_t *a, __cdsa_sll_data_t *b)
 {
-    __sll_data_t tmp = *a;
+    __cdsa_sll_data_t tmp = *a;
     *a = *b;
     *b = tmp;
 }
 
 #define pred(x) ((x) < pivot || (le && (x) == pivot))
 
-static struct __sll_elem_t *
-__partition (struct __sll_elem_t *head, struct __sll_elem_t *tail,
-             __sll_data_t pivot, bool le)
+static struct __cdsa_sll_elem_t *
+__partition (struct __cdsa_sll_elem_t *head, struct __cdsa_sll_elem_t *tail,
+             __cdsa_sll_data_t pivot, bool le)
 {
-    struct __sll_elem_t *mid = head;
+    struct __cdsa_sll_elem_t *mid = head;
 
     for (; mid != tail && pred (mid->data); mid = mid->next)
         ;
@@ -373,7 +373,7 @@ __partition (struct __sll_elem_t *head, struct __sll_elem_t *tail,
     if (mid == tail)
         return mid;
 
-    for (struct __sll_elem_t *r = mid->next; r != tail; r = r->next) {
+    for (struct __cdsa_sll_elem_t *r = mid->next; r != tail; r = r->next) {
         if (pred (r->data)) {
             __swap (&r->data, &mid->data);
             mid = mid->next;
@@ -386,21 +386,21 @@ __partition (struct __sll_elem_t *head, struct __sll_elem_t *tail,
 #undef pred
 
 static void
-__sll_quicksort (struct __sll_elem_t *head, struct __sll_elem_t *tail)
+__cdsa_sll_quicksort (struct __cdsa_sll_elem_t *head, struct __cdsa_sll_elem_t *tail)
 {
     if (head == tail)
         return;
 
-    __sll_data_t pivot = head->data;
-    struct __sll_elem_t *mid1 = __partition (head, tail, pivot, false);
-    struct __sll_elem_t *mid2 = __partition (mid1, tail, pivot, true);
+    __cdsa_sll_data_t pivot = head->data;
+    struct __cdsa_sll_elem_t *mid1 = __partition (head, tail, pivot, false);
+    struct __cdsa_sll_elem_t *mid2 = __partition (mid1, tail, pivot, true);
 
-    __sll_quicksort (head, mid1);
-    __sll_quicksort (mid2, tail);
+    __cdsa_sll_quicksort (head, mid1);
+    __cdsa_sll_quicksort (mid2, tail);
 }
 
 void
 cdsa_sll_sort_inplace_lt (cdsa_sll_t this)
 {
-    __sll_quicksort (this->front, NULL);
+    __cdsa_sll_quicksort (this->front, NULL);
 }

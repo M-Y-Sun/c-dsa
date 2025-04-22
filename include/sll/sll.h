@@ -21,13 +21,13 @@ void cdsa_sll_deinit (cdsa_sll_t vec);
 size_t cdsa_sll_size (cdsa_sll_t vec);
 
 /** @return A pointer to the first value */
-__sll_data_t cdsa_sll_front (cdsa_sll_t vec);
+__cdsa_sll_data_t cdsa_sll_front (cdsa_sll_t vec);
 
 /** @return A pointer to the last value */
-__sll_data_t cdsa_sll_back (cdsa_sll_t vec);
+__cdsa_sll_data_t cdsa_sll_back (cdsa_sll_t vec);
 
 /** @return If the vector is empty */
-__sll_data_t cdsa_sll_empty (cdsa_sll_t vec);
+__cdsa_sll_data_t cdsa_sll_empty (cdsa_sll_t vec);
 
 /****** MODIFIER FUNCTIONS ******/
 
@@ -40,34 +40,34 @@ void cdsa_sll_clear (cdsa_sll_t vec);
  * @param size The size to assign to
  * @param data The data to assign each element to
  * */
-void cdsa_sll_assign (cdsa_sll_t vec, size_t size, __sll_data_t data);
+void cdsa_sll_assign (cdsa_sll_t vec, size_t size, __cdsa_sll_data_t data);
 
 /**
  * Resizes the vector and initiates all values to a specific value
  * @param size The size to resize to
  * @param data The data to assign each new value to
  * */
-void cdsa_sll_resize (cdsa_sll_t vec, size_t size, __sll_data_t data);
+void cdsa_sll_resize (cdsa_sll_t vec, size_t size, __cdsa_sll_data_t data);
 
 /**
  * Adds an element to the end
  * @param data The data to append
  * */
-void cdsa_sll_pushb (cdsa_sll_t vec, __sll_data_t data);
+void cdsa_sll_pushb (cdsa_sll_t vec, __cdsa_sll_data_t data);
 
 /**
  * @param pos The position to get
  * @return A pointer to the value at a certain location.
  * */
-__sll_data_t *cdsa_sll_get (cdsa_sll_t vec, size_t pos);
+__cdsa_sll_data_t *cdsa_sll_get (cdsa_sll_t vec, size_t pos);
 
 /**
  * Inserts an element in a specified position
  * @param pos The position to insert at
  * @param data The data to insert
  * */
-struct __sll_elem_t *cdsa_sll_insert (cdsa_sll_t vec, size_t pos,
-                                      __sll_data_t data);
+struct __cdsa_sll_elem_t *cdsa_sll_insert (cdsa_sll_t vec, size_t pos,
+                                      __cdsa_sll_data_t data);
 
 /**
  * Swaps the value of two elements in a specified position
@@ -86,13 +86,13 @@ void cdsa_sll_erase (cdsa_sll_t vec, size_t pos);
  * Removes the last element.
  * @return The data stored by the popped value.
  * */
-__sll_data_t cdsa_sll_popb (cdsa_sll_t vec);
+__cdsa_sll_data_t cdsa_sll_popb (cdsa_sll_t vec);
 
 /**
  * Removes the first element.
  * @return The data stored by the popped value.
  * */
-__sll_data_t cdsa_sll_popf (cdsa_sll_t vec);
+__cdsa_sll_data_t cdsa_sll_popf (cdsa_sll_t vec);
 
 void cdsa_sll_sort (cdsa_sll_t this, int (*cmp) (const void *, const void *));
 

@@ -11,7 +11,7 @@
  * @param beg The beginning index
  * @param end The ending index
  */
-static inline __sll_data_t
+static inline __cdsa_sll_data_t
 __in_bound (cdsa_sll_t vec, size_t beg, size_t end)
 {
     return beg < 0 || end < 0 || beg > vec->size || end > vec->size
@@ -35,7 +35,7 @@ cdsa_sll_print (cdsa_sll_t vec, size_t beg, size_t end)
         return;
     }
 
-    struct __sll_elem_t *iter = __cdsa_sll_iter_begin (vec, beg);
+    struct __cdsa_sll_elem_t *iter = __cdsa_sll_iter_begin (vec, beg);
 
     printf ("[ ");
     for (size_t i = beg; i < end; ++i) {
@@ -70,7 +70,7 @@ cdsa_sll_sum (cdsa_sll_t vec, size_t beg, size_t end)
         return 0;
     }
 
-    struct __sll_elem_t *iter = __cdsa_sll_iter_begin (vec, beg);
+    struct __cdsa_sll_elem_t *iter = __cdsa_sll_iter_begin (vec, beg);
     int64_t sum = 0;
 
     for (size_t i = beg; i < end; ++i) {
@@ -95,7 +95,7 @@ cdsa_sll_prod (cdsa_sll_t vec, size_t beg, size_t end)
         return 0;
     }
 
-    struct __sll_elem_t *iter = __cdsa_sll_iter_begin (vec, beg);
+    struct __cdsa_sll_elem_t *iter = __cdsa_sll_iter_begin (vec, beg);
     int64_t prod = 1;
 
     for (size_t i = beg; i < end; ++i) {
