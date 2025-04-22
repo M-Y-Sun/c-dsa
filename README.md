@@ -10,7 +10,7 @@ Makefile is provided, run `make` to compile
 
 ## Singly Linked List
 
-Singly linked list, modeled after `std::list` in C++.
+Singly linked list, modeled after `std::list` in C++. See this [archived repository](https://github.com/s7a19t4r/extdlib-cvector) for the changelog of sll.
 
 Functions are concisely named to match the naming style of C standard library functions, such as a function named `pushb_v` compared to `sscanf_s` in `<stdlib.h>`.
 
