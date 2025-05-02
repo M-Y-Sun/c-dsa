@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "algs.h"
 #include "heap.h"
+#include "poly.h"
 #include "sll.h"
 
 static int
@@ -125,6 +127,35 @@ main (void)
 
     cdsa_sll_deinit (sll); // clean up sll and free memory
     printf ("[   \033[1;32mOK\033[0m   ] sll deinit\n");
+
+    puts ("--------");
+
+    // 1 + 3x + 2x^2 + 6x^3 + 2x^4
+    long double coefs[] = { 1, 3, 2, 6, 2 };
+
+    cdsa_poly_t p;
+    cdsa_poly_init (p, coefs, 4);
+    cdsa_poly_print (p);
+
+    printf ("eval at 1: %Lf\n", cdsa_poly_eval (p, 1));
+    printf ("eval at 2: %Lf\n", cdsa_poly_eval (p, 2));
+
+    cdsa_poly_ddx_n (p, 1);
+    cdsa_poly_print (p);
+    cdsa_poly_ddx_n (p, 1);
+    cdsa_poly_print (p);
+
+    cdsa_poly_deinit (p);
+
+    // x^5 - 23
+    long double coefs2[] = { -23, 0, 0, 0, 0, 1 };
+
+    cdsa_poly_init (p, coefs2, 5);
+
+    double r = cdsa_algs_newton_estim_n (p, 2, 3);
+    printf ("fifth root of 23 extimate: %lf\n", r);
+
+    cdsa_poly_deinit (p);
 
     return 0;
 }

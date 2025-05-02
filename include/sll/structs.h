@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef SLL_STRUCTS_H
-#define SLL_STRUCTS_H
+#ifndef CDSA_SLL_STRUCTS_H
+#define CDSA_SLL_STRUCTS_H
 
 #include <stdint.h>
 #include <stdlib.h>

@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef SLL_SLL_H
-#define SLL_SLL_H
+#ifndef CDSA_SLL_SLL_H
+#define CDSA_SLL_SLL_H
 
 #include "structs.h"
 
@@ -67,7 +67,7 @@ __cdsa_sll_data_t *cdsa_sll_get (cdsa_sll_t vec, size_t pos);
  * @param data The data to insert
  * */
 struct __cdsa_sll_elem_t *cdsa_sll_insert (cdsa_sll_t vec, size_t pos,
-                                      __cdsa_sll_data_t data);
+                                           __cdsa_sll_data_t data);
 
 /**
  * Swaps the value of two elements in a specified position

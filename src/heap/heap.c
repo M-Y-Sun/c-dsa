@@ -121,7 +121,8 @@ cdsa_heap_init_arr_compar (cdsa_heap_t this, const void *const arr, size_t siz,
 size_t
 cdsa_heap_expand (cdsa_heap_t this, size_t siz)
 {
-    if ((this->c_ = realloc (this->c_, siz * sizeof (__cdsa_heap_val_t))) == NULL)
+    if ((this->c_ = realloc (this->c_, siz * sizeof (__cdsa_heap_val_t)))
+        == NULL)
         return 0;
 
     return siz;

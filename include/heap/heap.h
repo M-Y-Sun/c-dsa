@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef HEAP_H
-#define HEAP_H
+#ifndef CDSA_HEAP_HEAP_H
+#define CDSA_HEAP_HEAP_H
 
 #include <stddef.h>
 #include <stdint.h>
@@ -56,8 +56,10 @@ extern void cdsa_heap_insert (cdsa_heap_t this, __cdsa_heap_val_t v);
 
 extern void cdsa_heap_delete (cdsa_heap_t this);
 
-extern void cdsa_heap_replace_always (const cdsa_heap_t this, __cdsa_heap_val_t v);
+extern void cdsa_heap_replace_always (const cdsa_heap_t this,
+                                      __cdsa_heap_val_t v);
 
-extern void cdsa_heap_replace_first (const cdsa_heap_t this, __cdsa_heap_val_t v);
+extern void cdsa_heap_replace_first (const cdsa_heap_t this,
+                                     __cdsa_heap_val_t v);
 
 #endif

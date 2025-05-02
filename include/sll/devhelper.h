@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef SLL_DEVHELPER_H
-#define SLL_DEVHELPER_H
+#ifndef CDSA_SLL_DEVHELPER_H
+#define CDSA_SLL_DEVHELPER_H
 
 #include <stdlib.h>
 #include "./structs.h"
