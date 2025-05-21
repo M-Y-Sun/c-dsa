@@ -14,6 +14,8 @@ typedef struct __cdsa_vec_struct {
     __cdsa_vec_val_t *ptr;
 } cdsa_vec_t[1];
 
+typedef struct __cdsa_vec_struct *restrict cdsa_vec_restrict_ptr_t;
+
 extern void cdsa_vec_init (cdsa_vec_t this);
 
 extern void cdsa_vec_deinit (cdsa_vec_t this);

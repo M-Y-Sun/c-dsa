@@ -71,7 +71,6 @@ a: $(MAIN)
 	done
 	$(REPLACE_FILES)
 	$(PRUNE)
-	$(FIXCDB)
 	echo "Output dumped to \`$(C_OUT)/lib/'"
 
 SO_INSTALL_PREFIX ?= $(IPREFIX)/lib
@@ -86,7 +85,6 @@ so: $(MAIN)
 	done
 	$(REPLACE_FILES)
 	$(PRUNE)
-	$(FIXCDB)
 	echo "Output dumped to \`$(C_OUT)/lib/'"
 
 all:
