@@ -9,6 +9,7 @@ OPTIMIZE ?= O1
 FILE = main
 C_OUT = build
 SRC_DIR = src
+COMPILEDB = compile_commands.json
 
 MAIN ?=  $(SRC_DIR)/$(FILE).c
 
@@ -41,13 +42,17 @@ endef
 
 PRUNE = $(SHELL) -c 'find $(C_OUT) -type d -empty -delete'
 
-CCPFX = $(CC) $$(find $(SRC_DIR) -type f -name '*.c') -o $(C_OUT)/bin/$(BIN) $(CFLAGS) 
+FIXCDB = $(SHELL) -c 'echo "[ $$(sed '\''$$ s/.$$//'\'' compile_commands.json) ]" >compile_commands.json'
+
+# CCPFX = $(CC) $$(find $(SRC_DIR) -type f -name '*.c') -o $(C_OUT)/bin/$(BIN) $(CFLAGS) 
+CCPFX = $(CC) -MJ $(COMPILEDB) $$(find $(SRC_DIR) -type f -name '*.c') -o $(C_OUT)/bin/$(BIN) $(CFLAGS) 
 
 default: $(MAIN)
 	$(MKDIRS)
 	$(CCPFX) -$(OPTIMIZE)
 	$(REPLACE_FILES)
 	$(PRUNE)
+	$(FIXCDB)
 	echo 'Output dumped to $(C_OUT)/bin/'
 
 IPREFIX=/usr/local
@@ -66,6 +71,7 @@ a: $(MAIN)
 	done
 	$(REPLACE_FILES)
 	$(PRUNE)
+	$(FIXCDB)
 	echo "Output dumped to \`$(C_OUT)/lib/'"
 
 SO_INSTALL_PREFIX ?= $(IPREFIX)/lib
@@ -80,6 +86,7 @@ so: $(MAIN)
 	done
 	$(REPLACE_FILES)
 	$(PRUNE)
+	$(FIXCDB)
 	echo "Output dumped to \`$(C_OUT)/lib/'"
 
 all:
@@ -92,6 +99,7 @@ fast: $(MAIN)
 	$(CCPFX) -Ofast
 	$(REPLACE_FILES)
 	$(PRUNE)
+	$(FIXCDB)
 	echo 'Output dumped to $(C_OUT)/bin/'
 
 debug: $(MAIN)
@@ -99,6 +107,7 @@ debug: $(MAIN)
 	$(CCPFX) -g
 	$(REPLACE_FILES)
 	$(PRUNE)
+	$(FIXCDB)
 	echo 'Output dumped to $(C_OUT)/bin/'
 
 size: $(MAIN)
@@ -106,6 +115,7 @@ size: $(MAIN)
 	$(CCPFX) -Os
 	$(REPLACE_FILES)
 	$(PRUNE)
+	$(FIXCDB)
 	echo 'Output dumped to $(C_OUT)/bin/'
 
 verbose: $(MAIN)
@@ -113,6 +123,7 @@ verbose: $(MAIN)
 	$(CCPFX) -$(OPTIMIZE) -v
 	$(REPLACE_FILES)
 	$(PRUNE)
+	$(FIXCDB)
 	echo 'Output dumped to $(C_OUT)/bin/'
 
 clean:

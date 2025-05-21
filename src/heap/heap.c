@@ -5,9 +5,9 @@
 #include "heap.h"
 
 #define root_(h) h->c_[CDSA_HEAP_ROOT_POS]
-#define lc_(i)   ((((i)-CDSA_HEAP_ROOT_POS) << 1) + 1 + CDSA_HEAP_ROOT_POS)
-#define rc_(i)   ((((i)-CDSA_HEAP_ROOT_POS) << 1) + 2 + CDSA_HEAP_ROOT_POS)
-#define pa_(i)   (((i)-1 - (((i) & 1) ^ 1)) >> 1)
+#define lc_(i)   ((((i) - CDSA_HEAP_ROOT_POS) << 1) + 1 + CDSA_HEAP_ROOT_POS)
+#define rc_(i)   ((((i) - CDSA_HEAP_ROOT_POS) << 1) + 2 + CDSA_HEAP_ROOT_POS)
+#define pa_(i)   (((i) - 1 - (((i) & 1) ^ 1)) >> 1)
 
 static void
 __cdsa_heap_swap (const cdsa_heap_t heap, size_t i, size_t j)

@@ -8,8 +8,8 @@
  * EXTERNAL REFERENCES:                                                      *
  * 'size_t' type              (from <stdlib.h>)                              *
  * 'free' function            (from <stdlib.h>)                              *
- * 'cdsa_sll_t ' struct             (from 'structs.h') * '__cdsa_sll_elem_t' struct
- * (from 'structs.h')                             *
+ * 'cdsa_sll_t ' struct             (from 'structs.h') * '__cdsa_sll_elem_t'
+ * struct (from 'structs.h')                             *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include "sll.h"

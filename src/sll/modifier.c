@@ -53,8 +53,8 @@ cdsa_sll_assign (cdsa_sll_t vec, size_t size, __cdsa_sll_data_t data)
         return;
 
     vec->size = size;
-    struct __cdsa_sll_elem_t *new
-        = (struct __cdsa_sll_elem_t *)malloc (sizeof (struct __cdsa_sll_elem_t));
+    struct __cdsa_sll_elem_t *new = (struct __cdsa_sll_elem_t *)malloc (
+        sizeof (struct __cdsa_sll_elem_t));
     if (new == NULL) {
         perror ("[ \033[1;31mFAILED\033[0m ] malloc: memory request service "
                 "failed\n");
@@ -64,7 +64,8 @@ cdsa_sll_assign (cdsa_sll_t vec, size_t size, __cdsa_sll_data_t data)
     struct __cdsa_sll_elem_t *iter = vec->front;
     for (size_t i = 1; i < size; ++i) {
         struct __cdsa_sll_elem_t *new_next
-            = (struct __cdsa_sll_elem_t *)malloc (sizeof (struct __cdsa_sll_elem_t));
+            = (struct __cdsa_sll_elem_t *)malloc (
+                sizeof (struct __cdsa_sll_elem_t));
         if (new_next == NULL) {
             perror ("[ \033[1;31mFAILED\033[0m ] malloc: memory request "
                     "service failed\n");
@@ -116,8 +117,8 @@ cdsa_sll_resize (cdsa_sll_t vec, size_t size, __cdsa_sll_data_t data)
 void
 cdsa_sll_pushb (cdsa_sll_t vec, __cdsa_sll_data_t data)
 {
-    struct __cdsa_sll_elem_t *new
-        = (struct __cdsa_sll_elem_t *)malloc (sizeof (struct __cdsa_sll_elem_t));
+    struct __cdsa_sll_elem_t *new = (struct __cdsa_sll_elem_t *)malloc (
+        sizeof (struct __cdsa_sll_elem_t));
     if (new == NULL) {
         perror ("[ \033[1;31mFAILED\033[0m ] malloc: memory request service "
                 "failed\n");
@@ -190,8 +191,8 @@ cdsa_sll_insert (cdsa_sll_t vec, size_t pos, __cdsa_sll_data_t data)
     }
 
     // set the values and link
-    struct __cdsa_sll_elem_t *new
-        = (struct __cdsa_sll_elem_t *)malloc (sizeof (struct __cdsa_sll_elem_t));
+    struct __cdsa_sll_elem_t *new = (struct __cdsa_sll_elem_t *)malloc (
+        sizeof (struct __cdsa_sll_elem_t));
     if (new == NULL) {
         perror ("[ \033[1;31mFAILED\033[0m ] malloc: memory request service "
                 "failed\n");
@@ -294,7 +295,8 @@ cdsa_sll_popb (cdsa_sll_t vec)
     }
 
     // get iterator to the last element
-    struct __cdsa_sll_elem_t *p_rm = __cdsa_sll_iter_begin (vec, vec->size - 1);
+    struct __cdsa_sll_elem_t *p_rm
+        = __cdsa_sll_iter_begin (vec, vec->size - 1);
     __cdsa_sll_data_t val = p_rm->data;
 
     free (p_rm);
@@ -386,7 +388,8 @@ __partition (struct __cdsa_sll_elem_t *head, struct __cdsa_sll_elem_t *tail,
 #undef pred
 
 static void
-__cdsa_sll_quicksort (struct __cdsa_sll_elem_t *head, struct __cdsa_sll_elem_t *tail)
+__cdsa_sll_quicksort (struct __cdsa_sll_elem_t *head,
+                      struct __cdsa_sll_elem_t *tail)
 {
     if (head == tail)
         return;

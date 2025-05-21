@@ -1,16 +1,25 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "algs.h"
 #include "heap.h"
 #include "poly.h"
 #include "sll.h"
+#include "vec.h"
 
 static int
 lt (const void *lhs, const void *rhs)
 {
     return *(int *)lhs - *(int *)rhs;
+}
+
+void
+print_vec (cdsa_vec_t v)
+{
+    for (size_t i = 0; i < v->siz; ++i)
+        printf ("%llu ", v->ptr[i]);
+
+    putchar ('\n');
 }
 
 int
@@ -90,12 +99,16 @@ main (void)
     cdsa_sll_swap (sll, 1, 2); // swaps two elements
     printf ("updated 1st index after swap: %llu\n", *cdsa_sll_get (sll, 1));
 
+    cdsa_sll_print_all (sll);
+
     cdsa_sll_resize (sll, 5, -1); // resizes the sll to a certain size with
                                   // undefined values set to a certain value
     printf ("size after first resize: %lu\n", cdsa_sll_size (sll));
 
     cdsa_sll_resize (sll, 3, -1);
     printf ("size after second resize: %lu\n", cdsa_sll_size (sll));
+
+    cdsa_sll_print_all (sll);
 
     cdsa_sll_swap (sll, 1, 2);
     cdsa_sll_pushb (sll, 6);
@@ -127,6 +140,64 @@ main (void)
 
     cdsa_sll_deinit (sll); // clean up sll and free memory
     printf ("[   \033[1;32mOK\033[0m   ] sll deinit\n");
+
+    puts ("--------");
+
+    cdsa_vec_t vec;
+    cdsa_vec_init (vec);
+    printf ("[   \033[1;32mOK\033[0m   ] vec init\n");
+
+    cdsa_vec_pushb (vec, 0);
+    cdsa_vec_pushb (vec, 1);
+    cdsa_vec_pushb (vec, 2);
+
+    printf ("size: %zu\n", vec->siz);
+    printf ("0th index: %llu\n", vec->ptr[0]);
+    printf ("1st index: %llu\n", vec->ptr[1]);
+    printf ("2nd index: %llu\n", vec->ptr[2]);
+
+    cdsa_vec_erase (vec, 1); // erases the element at a certain index
+    printf ("updated 1st index after erase: %llu\n", vec->ptr[1]);
+
+    cdsa_vec_insert (vec, 1, 4);
+    printf ("updated 1st index after insertion: %llu\n", vec->ptr[1]);
+
+    vec->ptr[1] = 8;
+    printf ("updated 1st index after change: %llu\n", vec->ptr[1]);
+
+    cdsa_vec_swap (vec, 1, 2); // swaps two elements
+    printf ("updated 1st index after swap: %llu\n", vec->ptr[1]);
+
+    print_vec (vec);
+
+    cdsa_vec_resiz (vec, 5);
+    printf ("size after first resize: %lu\n", vec->siz);
+
+    print_vec (vec);
+
+    cdsa_vec_resiz (vec, 3);
+    printf ("size after second resize: %lu\n", vec->siz);
+
+    print_vec (vec);
+
+    cdsa_vec_swap (vec, 1, 2);
+    cdsa_vec_pushb (vec, 6);
+    cdsa_vec_pushb (vec, 1);
+    cdsa_vec_pushb (vec, 16);
+    cdsa_vec_pushb (vec, 5);
+    cdsa_vec_pushb (vec, 8);
+    print_vec (vec);
+    cdsa_vec_sort (vec);
+    print_vec (vec);
+
+    // gets the first and last value respectively
+    printf ("(first value, last value): (%llu, %llu)\n", vec->ptr[0],
+            vec->ptr[vec->siz - 1]);
+
+    printf ("final vec: ");
+
+    cdsa_vec_deinit (vec); // clean up vec and free memory
+    printf ("[   \033[1;32mOK\033[0m   ] vec deinit\n");
 
     puts ("--------");
 
