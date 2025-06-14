@@ -2,6 +2,9 @@ MAKEFLAGS += --silent
 
 .PHONY: default so a fast debug size verbose clean
 
+# PREFIX ?= /usr/local
+PREFIX ?= lib
+
 CC = clang
 CFLAGS = $(INCLUDES) -Wall -Wextra -Wpedantic
 OPTIMIZE ?= O1
@@ -55,8 +58,6 @@ default: $(MAIN)
 	$(FIXCDB)
 	echo 'Output dumped to $(C_OUT)/bin/'
 
-IPREFIX=/usr/local
-
 a: $(MAIN)
 	$(MKDIRS)
 	for dir in $(SRC_DIR)/*/; do \
@@ -73,7 +74,7 @@ a: $(MAIN)
 	$(PRUNE)
 	echo "Output dumped to \`$(C_OUT)/lib/'"
 
-SO_INSTALL_PREFIX ?= $(IPREFIX)/lib
+SO_INSTALL_PREFIX ?= $(PREFIX)/lib
 
 so: $(MAIN)
 	$(MKDIRS)
@@ -135,16 +136,18 @@ install:
 	if [ ! -d $(C_OUT) ] || [ ! -d $(C_OUT)/lib ]; then \
 		echo 'Nothing to install'; \
 	else \
-		find $(C_OUT)/lib -type f -exec cp {} $(IPREFIX)/lib \; -exec echo Installed {} to $(IPREFIX)/lib/ \;; \
-		mkdir -p $(IPREFIX)/include/c/$(IINCL_DIR); \
-		find $(INCL_DIR) -type f -exec $(SHELL) -c 'loc=$(IPREFIX)/include/c/$(IINCL_DIR)/$$(echo {} | sed "s:^$(INCL_DIR)\/::" | sed "s:/.*$$::"); mkdir -p $$loc; cp {} $$loc' \; -exec echo Installed {} to $(IPREFIX)/include/c/$(IINCL_DIR)/ \;; \
+		if [ ! -d $(PREFIX) ]; then mkdir $(PREFIX); fi; \
+		mkdir $(PREFIX)/lib $(PREFIX)/include ; \
+		find $(C_OUT)/lib -type f -exec cp {} $(PREFIX)/lib \; -exec echo Installed {} to $(PREFIX)/lib/ \;; \
+		mkdir -p $(PREFIX)/include/c/$(IINCL_DIR); \
+		find $(INCL_DIR) -type f -exec $(SHELL) -c 'loc=$(PREFIX)/include/c/$(IINCL_DIR)/$$(echo {} | sed "s:^$(INCL_DIR)\/::" | sed "s:/.*$$::"); mkdir -p $$loc; cp {} $$loc' \; -exec echo Installed {} to $(PREFIX)/include/c/$(IINCL_DIR)/ \;; \
 	fi
 	echo 'All done'
 
 uninstall:
 	for dir in $(SRC_DIR)/*/; do \
 		dir=$${dir%*/}; \
-		name=$(IPREFIX)/lib/lib$${dir##*/}; \
+		name=$(PREFIX)/lib/lib$${dir##*/}; \
 		if [ -f $${name}.a ]; then \
 			rm $${name}.a; \
 			echo "Uninstalled $${name}.a"; \
@@ -154,5 +157,5 @@ uninstall:
 			echo "Uninstalled $${name}.so"; \
 		fi; \
 	done
-	rm -rv $(IPREFIX)/include/c/$(IINCL_DIR) | sed 's/^/Uninstalled /'
+	rm -rv $(PREFIX)/include/c/$(IINCL_DIR) | sed 's/^/Uninstalled /'
 	echo 'All done'

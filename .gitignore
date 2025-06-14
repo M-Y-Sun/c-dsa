@@ -42,6 +42,7 @@ dkms.conf
 
 # Compile output
 build/
+lib/
 
 # compile commands
 compile_commands.json
