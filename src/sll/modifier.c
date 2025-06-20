@@ -1,7 +1,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/_pthread/_pthread_types.h>
 
 #include "devhelper.h"
 #include "sll.h"

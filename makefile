@@ -1,13 +1,13 @@
-MAKEFLAGS += --silent
+# MAKEFLAGS += --silent
 
 .PHONY: default so a fast debug size verbose clean
 
-# PREFIX ?= /usr/local
+CC ?= clang
 PREFIX ?= lib
+EXTRA_CFLAGS ?= 
 
-CC = clang
 CFLAGS = $(INCLUDES) -Wall -Wextra -Wpedantic
-OPTIMIZE ?= O1
+OPTIMIZE ?= -O3
 
 FILE = main
 C_OUT = build
@@ -64,7 +64,7 @@ a: $(MAIN)
 		dir=$${dir%*/}; \
 		dirn=$${dir##*/}; \
 		mkdir tmp && cd tmp; \
-		clang -c -fPIC $$(find ../$$dir -type f -name '*.c') $$(find ../include -type d | sed 's/^/-I.\//') -Wall -Wextra -Wpedantic; \
+		clang -c -fPIC $$(find ../$$dir -type f -name '*.c') $$(find ../include -type d | sed 's/^/-I.\//') -Wall -Wextra -Wpedantic $(OPTIMIZE) $(EXTRA_CFLAGS); \
 		cd ..; \
 		ar r $(C_OUT)/lib/lib$${dirn}.a $$(find tmp -type f); \
 		rm -r tmp; \
@@ -74,14 +74,14 @@ a: $(MAIN)
 	$(PRUNE)
 	echo "Output dumped to \`$(C_OUT)/lib/'"
 
-SO_INSTALL_PREFIX ?= $(PREFIX)/lib
+INSTALL_DIR = $(PREFIX)/lib
 
 so: $(MAIN)
 	$(MKDIRS)
 	for dir in $(SRC_DIR)/*/; do \
 		dir=$${dir%*/}; \
 		dirn=$${dir##*/}; \
-		clang -shared -fPIC $$(find $$dir -type f -name '*.c') -o $(C_OUT)/lib/lib$${dirn}.so $(CFLAGS) -Wl,-install_name,$(SO_INSTALL_PREFIX)/lib$${dirn}.so; \
+		clang -shared -fPIC $$(find $$dir -type f -name '*.c') -o $(C_OUT)/lib/lib$${dirn}.so $(CFLAGS) -Wl,-install_name,$(INSTALL_DIR)/lib$${dirn}.so -Wall -Wextra -Wpedantic $(OPTIMIZE) $(EXTRA_CFLAGS); \
 		echo "Created lib$${dirn}.so"; \
 	done
 	$(REPLACE_FILES)
@@ -138,7 +138,7 @@ install:
 	else \
 		if [ ! -d $(PREFIX) ]; then mkdir $(PREFIX); fi; \
 		mkdir $(PREFIX)/lib $(PREFIX)/include ; \
-		find $(C_OUT)/lib -type f -exec cp {} $(PREFIX)/lib \; -exec echo Installed {} to $(PREFIX)/lib/ \;; \
+		find $(C_OUT)/lib -type f -exec cp {} $(INSTALL_DIR) \; -exec echo Installed {} to $(INSTALL_DIR)/ \;; \
 		mkdir -p $(PREFIX)/include/c/$(IINCL_DIR); \
 		find $(INCL_DIR) -type f -exec $(SHELL) -c 'loc=$(PREFIX)/include/c/$(IINCL_DIR)/$$(echo {} | sed "s:^$(INCL_DIR)\/::" | sed "s:/.*$$::"); mkdir -p $$loc; cp {} $$loc' \; -exec echo Installed {} to $(PREFIX)/include/c/$(IINCL_DIR)/ \;; \
 	fi
