@@ -5,7 +5,7 @@ The README for each data structure or algorithm is listed in the following secti
 ## Compilation
 
 Makefile is provided, run `make` to compile and run `make help` for makefile options.
-See my [cross compile script for NCAP](https://github.com/M-Y-Sun/NCAP/blob/main/app/src/main/c/deps/cdsa_install.sh) for an additional example.
+See my (archived) [cross compile script for NCAP](https://github.com/M-Y-Sun/NCAP/blob/fb4bf820949571a62b374f4c11eae310ef3d888f/app/src/main/c/deps/cdsa_install.sh) for an additional example.
 
 ---
 
