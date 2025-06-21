@@ -1,20 +1,20 @@
 # MAKEFLAGS += --silent
 
-.PHONY: default so a fast debug size verbose clean
+.PHONY: default so a fast debug size verbose clean help
 
 CC ?= clang
 PREFIX ?= lib
+OPTIMIZE ?= -O3
 EXTRA_CFLAGS ?= 
 
 CFLAGS = $(INCLUDES) -Wall -Wextra -Wpedantic
-OPTIMIZE ?= -O3
 
 FILE = main
 C_OUT = build
 SRC_DIR = src
 COMPILEDB = compile_commands.json
 
-MAIN ?=  $(SRC_DIR)/$(FILE).c
+MAIN ?= $(SRC_DIR)/$(FILE).c
 
 BIN = $(FILE)
 INCL_DIR = include
@@ -52,7 +52,7 @@ CCPFX = $(CC) -MJ $(COMPILEDB) $$(find $(SRC_DIR) -type f -name '*.c') -o $(C_OU
 
 default: $(MAIN)
 	$(MKDIRS)
-	$(CCPFX) -$(OPTIMIZE)
+	$(CCPFX) $(OPTIMIZE)
 	$(REPLACE_FILES)
 	$(PRUNE)
 	$(FIXCDB)
@@ -119,7 +119,7 @@ size: $(MAIN)
 
 verbose: $(MAIN)
 	$(MKDIRS)
-	$(CCPFX) -$(OPTIMIZE) -v
+	$(CCPFX) $(OPTIMIZE) -v
 	$(REPLACE_FILES)
 	$(PRUNE)
 	$(FIXCDB)
@@ -159,3 +159,32 @@ uninstall:
 	done
 	rm -rv $(PREFIX)/include/c/$(IINCL_DIR) | sed 's/^/Uninstalled /'
 	echo 'All done'
+
+define HELPDOC
+TARGETS
+	default  Build an executable to build/bin/
+	a        Build static libraries (ar archives) to build/lib/
+	so       Build shared libraries (.so) to build/lib
+	all      Runs the default, a, and so targets
+	fast     Build an -O3 executable to build/bin/
+	debug    Build an executable with debug symbols
+	size     Build an -Os executable (for supported compilers)
+	verbose  Build with the -v flag
+	clean    Clean the build folder
+	install  Installs build cache files in build/ to PREFIX 
+	help     Prints this help message
+
+OPTIONS
+	CC            C compiler [clang]
+	PREFIX        Install prefix [lib]
+	OPTIMIZE      Optimization flag [-O3]
+	EXTRA_CFLAGS  Extra compile flags []
+
+EXAMPLES
+	Make shared libraries using a toolchain and install to /usr/local
+		$ make so install CC=arm-linux-gnueabi-gcc PREFIX=/usr/local EXTRA_CFLAGS=-fPIC
+endef
+
+export HELPDOC
+help:
+	echo "$$HELPDOC"
